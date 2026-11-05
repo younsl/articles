@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Articles</title>
+<meta name="description" content="Infrastructure postmortems and deep dives, drawn as diagrams.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #000; --bg-1: #0a0a0a; --line: #1f1f1f; --line-2: #333; --fg: #ededed; --fg-2: #a1a1a1; --fg-3: #666; --err: #ff6166; color-scheme: dark; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--fg); font-family: "Geist", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
+header { padding: 96px 0 48px; }
+h1 { font-size: clamp(40px, 7vw, 64px); letter-spacing: -.045em; font-weight: 600; line-height: 1; }
+.list { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--bg-1); margin-bottom: 96px; }
+.item { display: grid; grid-template-columns: 110px 1fr; gap: 20px; align-items: center; padding: 20px 22px; border-bottom: 1px solid var(--line); transition: background .15s; }
+.item:last-child { border-bottom: 0; }
+.item:hover { background: #111; }
+.date { font-family: "Geist Mono", ui-monospace, monospace; font-size: 12px; color: var(--fg-3); }
+.t { font-weight: 500; letter-spacing: -.01em; }
+.d { font-size: 13px; color: var(--fg-2); margin-top: 2px; }
+@media (max-width: 560px) { .item { grid-template-columns: 1fr; gap: 6px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Articles</h1>
+  </header>
+  <div class="list">
+    <a class="item" href="reddit-pi-day-2023/">
+      <span class="date">2023-03-14</span>
+      <span><div class="t">Reddit Pi-Day Outage</div><div class="d">Kubernetes 1.24 removed a label. Calico route reflectors vanished.</div></span>
+    </a>
+  </div>
+</div>
+</body>
+</html>

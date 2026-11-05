@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reddit Pi-Day Outage</title>
+<meta name="description" content="Postmortem infographic: a Kubernetes 1.23 to 1.24 upgrade removed a node label that Calico BGP route reflectors depended on, taking Reddit down for 314 minutes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #000;
+  --bg-1: #0a0a0a;
+  --bg-2: #111;
+  --line: #1f1f1f;
+  --line-2: #333;
+  --fg: #ededed;
+  --fg-2: #a1a1a1;
+  --fg-3: #666;
+  --ok: #45dec5;
+  --err: #ff6166;
+  --warn: #f5a524;
+  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+
+
+header { position: relative; padding: 88px 0 56px; overflow: hidden; }
+h1 { font-size: clamp(40px, 7vw, 76px); line-height: 1; letter-spacing: -.045em; font-weight: 600; margin: 20px 0 18px; color: var(--fg); }
+.lede { font-size: 18px; color: var(--fg-2); max-width: 620px; }
+.lede code { font-family: var(--mono); font-size: .88em; color: var(--fg); }
+
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin-top: 48px; background: var(--bg-1); }
+.stat { padding: 24px 22px; border-right: 1px solid var(--line); }
+.stat:last-child { border-right: 0; }
+.stat .k { font-family: var(--mono); font-size: 11px; color: var(--fg-3); text-transform: uppercase; letter-spacing: .08em; }
+.stat .v { font-size: 40px; font-weight: 600; letter-spacing: -.04em; margin-top: 8px; font-variant-numeric: tabular-nums; }
+.stat .v small { font-size: 15px; color: var(--fg-3); font-weight: 400; letter-spacing: 0; margin-left: 4px; }
+.stat .s { font-size: 13px; color: var(--fg-2); margin-top: 2px; }
+.stat .v.err { color: var(--err); }
+
+section { padding: 72px 0; border-top: 1px solid var(--line); }
+.sec-h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 28px; flex-wrap: wrap; }
+h2 { font-size: 28px; letter-spacing: -.03em; font-weight: 600; }
+.sec-h p { color: var(--fg-2); font-size: 15px; flex-basis: 100%; margin-top: 4px; }
+
+.card { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-1); }
+figure.card { margin: 0 0 16px; }
+figcaption { font-family: var(--mono); font-size: 12px; color: var(--ok); padding: 14px 20px 0; }
+figcaption.bad { color: var(--err); }
+.callout { padding: 20px; font-size: 22px; letter-spacing: -.02em; font-weight: 600; line-height: 1.25; }
+.callout span { color: var(--fg-3); }
+
+.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.scroll svg { display: block; min-width: 760px; width: 100%; height: auto; }
+
+svg text { font-family: var(--mono); }
+.t-lg { font: 600 14px var(--sans); fill: var(--fg); }
+.t-sm { font-size: 10.5px; fill: var(--fg-3); }
+.t-md { font-size: 11.5px; fill: var(--fg-2); }
+.zone { fill: none; stroke: var(--line-2); stroke-dasharray: 3 4; }
+.node { fill: var(--bg-2); stroke: var(--line-2); }
+.chip { fill: var(--bg); stroke: var(--line-2); }
+.bgp { stroke: var(--fg-2); stroke-width: 1; fill: none; stroke-dasharray: 4 6; animation: flow 1.2s linear infinite; opacity: .55; transition: stroke .4s, opacity .4s; }
+@keyframes flow { to { stroke-dashoffset: -20; } }
+.rr { transition: opacity .4s; }
+.lbl-new, .x-mark, .err-only { opacity: 0; transition: opacity .4s; }
+.lbl-old, .ok-only { transition: opacity .4s; }
+.route-ok { fill: var(--ok); }
+.ok { fill: var(--ok); }
+.errf { fill: var(--err); }
+.pod { fill: var(--fg-3); transition: fill .4s; }
+.p2p { stroke: var(--ok); stroke-width: 1.5; fill: none; transition: stroke .4s; }
+.halo { fill: var(--ok); opacity: .15; }
+
+.arch[data-v="124"] .bgp { stroke: var(--err); opacity: .18; animation: none; stroke-dasharray: 2 6; }
+.arch[data-v="124"] .rr { opacity: 0; }
+.arch[data-v="124"] .lbl-old, .arch[data-v="124"] .ok-only { opacity: 0; }
+.arch[data-v="124"] .lbl-new, .arch[data-v="124"] .x-mark, .arch[data-v="124"] .err-only { opacity: 1; }
+.arch[data-v="124"] .pod { fill: var(--err); }
+.arch[data-v="124"] .p2p { stroke: var(--err); stroke-dasharray: 5 5; }
+.arch[data-v="124"] .sel-box { stroke: var(--err); }
+@media (prefers-reduced-motion: reduce) { .bgp { animation: none; } * { transition: none !important; } }
+
+.chain { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; }
+.step { position: relative; padding: 20px 18px 22px; border-right: 1px solid var(--line); }
+.step:last-child { border-right: 0; }
+
+.step .t { font-weight: 600; font-size: 15px; margin-top: 4px; letter-spacing: -.01em; }
+.step .d { font-family: var(--mono); font-size: 11.5px; color: var(--fg-2); margin-top: 6px; word-break: break-word; }
+.step .bar { position: absolute; left: 0; right: 0; top: 0; height: 2px; }
+.step::after { content: ""; position: absolute; right: -5px; top: 44px; width: 8px; height: 8px; border-top: 1px solid var(--line-2); border-right: 1px solid var(--line-2); transform: rotate(45deg); background: var(--bg-1); z-index: 1; }
+.step:last-child::after { display: none; }
+
+.two { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 16px; }
+.matrix { padding: 8px 0; }
+.row { display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 11px 20px; border-bottom: 1px solid var(--line); font-size: 14px; }
+.row:last-child { border-bottom: 0; }
+.row .layer { font-family: var(--mono); font-size: 11px; color: var(--fg-3); display: block; }
+.badge { font-family: var(--mono); font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid; }
+.badge.ok { color: var(--ok); border-color: rgba(69,222,197,.35); background: rgba(69,222,197,.06); }
+.badge.err { color: var(--err); border-color: rgba(255,97,102,.35); background: rgba(255,97,102,.06); }
+
+pre { font-family: var(--mono); font-size: 13px; line-height: 1.8; padding: 18px 20px; overflow-x: auto; color: var(--fg-2); }
+pre .del { color: var(--err); display: block; background: rgba(255,97,102,.07); margin: 0 -20px; padding: 0 20px; }
+pre .add { color: var(--ok); display: block; background: rgba(69,222,197,.07); margin: 0 -20px; padding: 0 20px; }
+pre .c { color: var(--fg-3); }
+pre .hl { color: var(--fg); }
+pre .m0 { color: var(--err); font-weight: 500; }
+
+.rec { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); gap: 16px; align-items: stretch; }
+.decision svg { display: block; width: 100%; height: auto; }
+.phases { padding: 6px 0; }
+.ph { display: grid; grid-template-columns: 28px 1fr; gap: 14px; padding: 14px 20px; position: relative; }
+.ph .b { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line-2); display: grid; place-items: center; font-family: var(--mono); font-size: 11px; color: var(--fg-2); background: var(--bg); position: relative; z-index: 1; }
+.ph:not(:last-child)::before { content: ""; position: absolute; left: 33px; top: 42px; bottom: -14px; width: 1px; background: var(--line-2); }
+.ph .t { font-weight: 600; font-size: 14px; }
+.ph .d { font-family: var(--mono); font-size: 11.5px; color: var(--fg-2); }
+.ph.hot .b { border-color: var(--warn); color: var(--warn); }
+.ph.bad .b { border-color: var(--err); color: var(--err); }
+.ph.good .b { border-color: var(--ok); color: var(--ok); }
+
+.lessons { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--bg-1); }
+.lesson { padding: 24px 20px; border-right: 1px solid var(--line); }
+.lesson:last-child { border-right: 0; }
+.lesson .t { font-weight: 600; letter-spacing: -.01em; }
+.lesson .d { font-size: 13px; color: var(--fg-2); margin-top: 6px; }
+
+footer { border-top: 1px solid var(--line); padding: 40px 0 64px; font-size: 13px; color: var(--fg-3); }
+footer .src { display: grid; gap: 8px; margin-top: 12px; }
+footer a { color: var(--fg-2); border-bottom: 1px solid var(--line-2); }
+footer a:hover { color: var(--fg); }
+
+@media (max-width: 860px) {
+  .stats { grid-template-columns: 1fr 1fr; }
+  .stat:nth-child(2) { border-right: 0; }
+  .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .chain { grid-template-columns: 1fr 1fr; }
+  .step { border-bottom: 1px solid var(--line); }
+  .step:nth-child(2n) { border-right: 0; }
+  .step:nth-last-child(-n+2) { border-bottom: 0; }
+  .step::after { display: none; }
+  .two, .rec { grid-template-columns: minmax(0,1fr); }
+  .lessons { grid-template-columns: 1fr 1fr; }
+  .lesson:nth-child(2n) { border-right: 0; }
+  .lesson:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+}
+@media (max-width: 480px) {
+  header { padding: 56px 0 40px; }
+  .stat .v { font-size: 32px; }
+  .chain, .lessons { grid-template-columns: 1fr; }
+  .step, .lesson { border-right: 0 !important; border-bottom: 1px solid var(--line) !important; }
+  .step:last-child, .lesson:last-child { border-bottom: 0 !important; }
+}
+</style>
+</head>
+<body>
+
+
+<header>
+  <div class="wrap">
+    <h1>Reddit Pi-Day Outage</h1>
+    <p class="lede">A routine Kubernetes 1.23 to 1.24 upgrade removed one node label. Calico's BGP route reflectors were selected by that label. The pod network went dark.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="k">Duration</div><div class="v">314<small>min</small></div><div class="s">2023-03-14</div></div>
+      <div class="stat"><div class="k">Trigger</div><div class="v">1.24</div><div class="s">from 1.23, in-place</div></div>
+      <div class="stat"><div class="k">Labels removed</div><div class="v">1</div><div class="s">node-role/master</div></div>
+      <div class="stat"><div class="k">Route reflectors</div><div class="v err">0</div><div class="s">selector matched nothing</div></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h"><h2>Architecture</h2><p>Workers peer with BGP route reflectors on the control plane. Reflectors are picked by node label.</p></div>
+
+    <figure class="card"><figcaption>1.23</figcaption><div class="scroll">
+<svg class="arch" data-v="123" viewBox="0 0 960 560" role="img">
+  <title>Calico BGP topology: worker nodes peer with route reflectors running on control plane nodes selected by the node-role.kubernetes.io/master label</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#a1a1a1"/></marker>
+  </defs>
+
+  <rect class="zone" x="30" y="28" width="900" height="186" rx="12"/>
+  <text class="t-sm" x="48" y="50" letter-spacing="1.5">CONTROL PLANE</text>
+  <text class="t-sm" x="912" y="50" text-anchor="end">kube-apiserver &middot; etcd &middot; scheduler</text>
+
+  <g id="cps">
+    <g transform="translate(110,68)">
+      <rect class="node" width="200" height="124" rx="8"/>
+      <circle class="ok" cx="18" cy="20" r="3.5"/><text class="t-lg" x="30" y="25">cp-1</text>
+      <text class="t-sm" x="186" y="25" text-anchor="end">Ready</text>
+      <rect class="chip sel-box" x="12" y="40" width="176" height="24" rx="5"/>
+      <text class="t-md lbl-old" x="22" y="56">role/master</text>
+      <text class="t-md lbl-new" x="22" y="56" style="fill:var(--warn)">role/control-plane</text>
+      <g class="rr"><rect x="12" y="76" width="176" height="34" rx="6" fill="rgba(69,222,197,.08)" stroke="rgba(69,222,197,.4)"/><text x="100" y="98" text-anchor="middle" style="fill:var(--ok);font-size:12px">BGP route reflector</text></g>
+      <g class="err-only"><rect x="12" y="76" width="176" height="34" rx="6" fill="none" stroke="var(--line-2)" stroke-dasharray="3 3"/><text x="100" y="98" text-anchor="middle" class="t-sm">not selected</text></g>
+    </g>
+    <g transform="translate(380,68)">
+      <rect class="node" width="200" height="124" rx="8"/>
+      <circle class="ok" cx="18" cy="20" r="3.5"/><text class="t-lg" x="30" y="25">cp-2</text>
+      <text class="t-sm" x="186" y="25" text-anchor="end">Ready</text>
+      <rect class="chip sel-box" x="12" y="40" width="176" height="24" rx="5"/>
+      <text class="t-md lbl-old" x="22" y="56">role/master</text>
+      <text class="t-md lbl-new" x="22" y="56" style="fill:var(--warn)">role/control-plane</text>
+      <g class="rr"><rect x="12" y="76" width="176" height="34" rx="6" fill="rgba(69,222,197,.08)" stroke="rgba(69,222,197,.4)"/><text x="100" y="98" text-anchor="middle" style="fill:var(--ok);font-size:12px">BGP route reflector</text></g>
+      <g class="err-only"><rect x="12" y="76" width="176" height="34" rx="6" fill="none" stroke="var(--line-2)" stroke-dasharray="3 3"/><text x="100" y="98" text-anchor="middle" class="t-sm">not selected</text></g>
+    </g>
+    <g transform="translate(650,68)">
+      <rect class="node" width="200" height="124" rx="8"/>
+      <circle class="ok" cx="18" cy="20" r="3.5"/><text class="t-lg" x="30" y="25">cp-3</text>
+      <text class="t-sm" x="186" y="25" text-anchor="end">Ready</text>
+      <rect class="chip sel-box" x="12" y="40" width="176" height="24" rx="5"/>
+      <text class="t-md lbl-old" x="22" y="56">role/master</text>
+      <text class="t-md lbl-new" x="22" y="56" style="fill:var(--warn)">role/control-plane</text>
+      <g class="rr"><rect x="12" y="76" width="176" height="34" rx="6" fill="rgba(69,222,197,.08)" stroke="rgba(69,222,197,.4)"/><text x="100" y="98" text-anchor="middle" style="fill:var(--ok);font-size:12px">BGP route reflector</text></g>
+      <g class="err-only"><rect x="12" y="76" width="176" height="34" rx="6" fill="none" stroke="var(--line-2)" stroke-dasharray="3 3"/><text x="100" y="98" text-anchor="middle" class="t-sm">not selected</text></g>
+    </g>
+  </g>
+
+  <g id="bgp">
+    <path class="bgp" d="M210 192 L135 330"/><path class="bgp" d="M210 192 L355 330"/><path class="bgp" d="M210 192 L575 330"/><path class="bgp" d="M210 192 L795 330"/>
+    <path class="bgp" d="M480 192 L165 330"/><path class="bgp" d="M480 192 L385 330"/><path class="bgp" d="M480 192 L605 330"/><path class="bgp" d="M480 192 L825 330"/>
+    <path class="bgp" d="M750 192 L195 330"/><path class="bgp" d="M750 192 L415 330"/><path class="bgp" d="M750 192 L635 330"/><path class="bgp" d="M750 192 L855 330"/>
+  </g>
+  <g class="x-mark">
+    <rect x="390" y="244" width="180" height="30" rx="15" fill="#000" stroke="var(--err)"/>
+    <text x="480" y="263" text-anchor="middle" style="fill:var(--err);font-size:11.5px">0 peers &middot; no routes</text>
+  </g>
+  <g class="ok-only">
+    <rect x="400" y="244" width="160" height="30" rx="15" fill="#000" stroke="var(--line-2)"/>
+    <text x="480" y="263" text-anchor="middle" class="t-md">routes reflected</text>
+  </g>
+
+  <rect class="zone" x="30" y="310" width="900" height="222" rx="12"/>
+  <text class="t-sm" x="48" y="304" letter-spacing="1.5" dy="-6">DATA PLANE</text>
+
+  <g id="workers">
+    <g transform="translate(60,330)">
+      <rect class="node" width="190" height="130" rx="8"/>
+      <circle class="ok" cx="18" cy="20" r="3.5"/><text class="t-lg" x="30" y="25">worker-a</text><text class="t-sm" x="176" y="25" text-anchor="end">Ready</text>
+      <text class="t-sm" x="14" y="50">pod CIDR 10.0.1.0/24</text>
+      <circle class="pod" cx="26" cy="76" r="7"/><circle class="pod" cx="48" cy="76" r="7"/><circle class="pod" cx="70" cy="76" r="7"/>
+      <text class="t-md ok-only" x="14" y="112">routes: 3 / 3</text>
+      <text class="t-md err-only" x="14" y="112" style="fill:var(--err)">routes: 0 / 3</text>
+    </g>
+    <g transform="translate(280,330)">
+      <rect class="node" width="190" height="130" rx="8"/>
+      <circle class="ok" cx="18" cy="20" r="3.5"/><text class="t-lg" x="30" y="25">worker-b</text><text class="t-sm" x="176" y="25" text-anchor="end">Ready</text>
+      <text class="t-sm" x="14" y="50">pod CIDR 10.0.2.0/24</text>
+      <circle class="pod" cx="26" cy="76" r="7"/><circle class="pod" cx="48" cy="76" r="7"/>
+      <text class="t-md ok-only" x="14" y="112">routes: 3 / 3</text>
+      <text class="t-md err-only" x="14" y="112" style="fill:var(--err)">routes: 0 / 3</text>
+    </g>
+    <g transform="translate(500,330)">
+      <rect class="node" width="190" height="130" rx="8"/>
+      <circle class="ok" cx="18" cy="20" r="3.5"/><text class="t-lg" x="30" y="25">worker-c</text><text class="t-sm" x="176" y="25" text-anchor="end">Ready</text>
+      <text class="t-sm" x="14" y="50">pod CIDR 10.0.3.0/24</text>
+      <circle class="pod" cx="26" cy="76" r="7"/><circle class="pod" cx="48" cy="76" r="7"/><circle class="pod" cx="70" cy="76" r="7"/><circle class="pod" cx="92" cy="76" r="7"/>
+      <text class="t-md ok-only" x="14" y="112">routes: 3 / 3</text>
+      <text class="t-md err-only" x="14" y="112" style="fill:var(--err)">routes: 0 / 3</text>
+    </g>
+    <g transform="translate(720,330)">
+      <rect class="node" width="190" height="130" rx="8"/>
+      <circle class="ok" cx="18" cy="20" r="3.5"/><text class="t-lg" x="30" y="25">worker-d</text><text class="t-sm" x="176" y="25" text-anchor="end">Ready</text>
+      <text class="t-sm" x="14" y="50">pod CIDR 10.0.4.0/24</text>
+      <circle class="pod" cx="26" cy="76" r="7"/><circle class="pod" cx="48" cy="76" r="7"/>
+      <text class="t-md ok-only" x="14" y="112">routes: 3 / 3</text>
+      <text class="t-md err-only" x="14" y="112" style="fill:var(--err)">routes: 0 / 3</text>
+    </g>
+  </g>
+
+  <path class="p2p" d="M86 460 V500 H766 V460" marker-end="url(#ah)"/>
+  <g class="ok-only"><rect x="376" y="488" width="208" height="24" rx="12" fill="#000" stroke="rgba(69,222,197,.4)"/><text x="480" y="504" text-anchor="middle" style="fill:var(--ok);font-size:11.5px">10.0.1.7 to 10.0.4.3 ok</text></g>
+  <g class="err-only"><rect x="356" y="488" width="248" height="24" rx="12" fill="#000" stroke="var(--err)"/><text x="480" y="504" text-anchor="middle" style="fill:var(--err);font-size:11.5px">10.0.1.7 to 10.0.4.3 unreachable</text></g>
+</svg>
+</div></figure>
+    <figure class="card"><figcaption class="bad">1.24</figcaption><div class="scroll">
+<svg class="arch" data-v="124" viewBox="0 0 960 560" role="img">
+  <title>Calico BGP topology: worker nodes peer with route reflectors running on control plane nodes selected by the node-role.kubernetes.io/master label</title>
+  <defs>
+    <marker id="ah-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#a1a1a1"/></marker>
+  </defs>
+
+  <rect class="zone" x="30" y="28" width="900" height="186" rx="12"/>
+  <text class="t-sm" x="48" y="50" letter-spacing="1.5">CONTROL PLANE</text>
+  <text class="t-sm" x="912" y="50" text-anchor="end">kube-apiserver &middot; etcd &middot; scheduler</text>
+
+  <g id="cps">
+    <g transform="translate(110,68)">
+      <rect class="node" width="200" height="124" rx="8"/>
+      <circle class="ok" cx="18" cy="20" r="3.5"/><text class="t-lg" x="30" y="25">cp-1</text>
+      <text class="t-sm" x="186" y="25" text-anchor="end">Ready</text>
+      <rect class="chip sel-box" x="12" y="40" width="176" height="24" rx="5"/>
+      <text class="t-md lbl-old" x="22" y="56">role/master</text>
+      <text class="t-md lbl-new" x="22" y="56" style="fill:var(--warn)">role/control-plane</text>
+      <g class="rr"><rect x="12" y="76" width="176" height="34" rx="6" fill="rgba(69,222,197,.08)" stroke="rgba(69,222,197,.4)"/><text x="100" y="98" text-anchor="middle" style="fill:var(--ok);font-size:12px">BGP route reflector</text></g>
+      <g class="err-only"><rect x="12" y="76" width="176" height="34" rx="6" fill="none" stroke="var(--line-2)" stroke-dasharray="3 3"/><text x="100" y="98" text-anchor="middle" class="t-sm">not selected</text></g>
+    </g>
+    <g transform="translate(380,68)">
+      <rect class="node" width="200" height="124" rx="8"/>
+      <circle class="ok" cx="18" cy="20" r="3.5"/><text class="t-lg" x="30" y="25">cp-2</text>
+      <text class="t-sm" x="186" y="25" text-anchor="end">Ready</text>
+      <rect class="chip sel-box" x="12" y="40" width="176" height="24" rx="5"/>
+      <text class="t-md lbl-old" x="22" y="56">role/master</text>
+      <text class="t-md lbl-new" x="22" y="56" style="fill:var(--warn)">role/control-plane</text>
+      <g class="rr"><rect x="12" y="76" width="176" height="34" rx="6" fill="rgba(69,222,197,.08)" stroke="rgba(69,222,197,.4)"/><text x="100" y="98" text-anchor="middle" style="fill:var(--ok);font-size:12px">BGP route reflector</text></g>
+      <g class="err-only"><rect x="12" y="76" width="176" height="34" rx="6" fill="none" stroke="var(--line-2)" stroke-dasharray="3 3"/><text x="100" y="98" text-anchor="middle" class="t-sm">not selected</text></g>
+    </g>
+    <g transform="translate(650,68)">
+      <rect class="node" width="200" height="124" rx="8"/>
+      <circle class="ok" cx="18" cy="20" r="3.5"/><text class="t-lg" x="30" y="25">cp-3</text>
+      <text class="t-sm" x="186" y="25" text-anchor="end">Ready</text>
+      <rect class="chip sel-box" x="12" y="40" width="176" height="24" rx="5"/>
+      <text class="t-md lbl-old" x="22" y="56">role/master</text>
+      <text class="t-md lbl-new" x="22" y="56" style="fill:var(--warn)">role/control-plane</text>
+      <g class="rr"><rect x="12" y="76" width="176" height="34" rx="6" fill="rgba(69,222,197,.08)" stroke="rgba(69,222,197,.4)"/><text x="100" y="98" text-anchor="middle" style="fill:var(--ok);font-size:12px">BGP route reflector</text></g>
+      <g class="err-only"><rect x="12" y="76" width="176" height="34" rx="6" fill="none" stroke="var(--line-2)" stroke-dasharray="3 3"/><text x="100" y="98" text-anchor="middle" class="t-sm">not selected</text></g>
+    </g>
+  </g>
+
+  <g id="bgp">
+    <path class="bgp" d="M210 192 L135 330"/><path class="bgp" d="M210 192 L355 330"/><path class="bgp" d="M210 192 L575 330"/><path class="bgp" d="M210 192 L795 330"/>
+    <path class="bgp" d="M480 192 L165 330"/><path class="bgp" d="M480 192 L385 330"/><path class="bgp" d="M480 192 L605 330"/><path class="bgp" d="M480 192 L825 330"/>
+    <path class="bgp" d="M750 192 L195 330"/><path class="bgp" d="M750 192 L415 330"/><path class="bgp" d="M750 192 L635 330"/><path class="bgp" d="M750 192 L855 330"/>
+  </g>
+  <g class="x-mark">
+    <rect x="390" y="244" width="180" height="30" rx="15" fill="#000" stroke="var(--err)"/>
+    <text x="480" y="263" text-anchor="middle" style="fill:var(--err);font-size:11.5px">0 peers &middot; no routes</text>
+  </g>
+  <g class="ok-only">
+    <rect x="400" y="244" width="160" height="30" rx="15" fill="#000" stroke="var(--line-2)"/>
+    <text x="480" y="263" text-anchor="middle" class="t-md">routes reflected</text>
+  </g>
+
+  <rect class="zone" x="30" y="310" width="900" height="222" rx="12"/>
+  <text class="t-sm" x="48" y="304" letter-spacing="1.5" dy="-6">DATA PLANE</text>
+
+  <g id="workers">
+    <g transform="translate(60,330)">
+      <rect class="node" width="190" height="130" rx="8"/>
+      <circle class="ok" cx="18" cy="20" r="3.5"/><text class="t-lg" x="30" y="25">worker-a</text><text class="t-sm" x="176" y="25" text-anchor="end">Ready</text>
+      <text class="t-sm" x="14" y="50">pod CIDR 10.0.1.0/24</text>
+      <circle class="pod" cx="26" cy="76" r="7"/><circle class="pod" cx="48" cy="76" r="7"/><circle class="pod" cx="70" cy="76" r="7"/>
+      <text class="t-md ok-only" x="14" y="112">routes: 3 / 3</text>
+      <text class="t-md err-only" x="14" y="112" style="fill:var(--err)">routes: 0 / 3</text>
+    </g>
+    <g transform="translate(280,330)">
+      <rect class="node" width="190" height="130" rx="8"/>
+      <circle class="ok" cx="18" cy="20" r="3.5"/><text class="t-lg" x="30" y="25">worker-b</text><text class="t-sm" x="176" y="25" text-anchor="end">Ready</text>
+      <text class="t-sm" x="14" y="50">pod CIDR 10.0.2.0/24</text>
+      <circle class="pod" cx="26" cy="76" r="7"/><circle class="pod" cx="48" cy="76" r="7"/>
+      <text class="t-md ok-only" x="14" y="112">routes: 3 / 3</text>
+      <text class="t-md err-only" x="14" y="112" style="fill:var(--err)">routes: 0 / 3</text>
+    </g>
+    <g transform="translate(500,330)">
+      <rect class="node" width="190" height="130" rx="8"/>
+      <circle class="ok" cx="18" cy="20" r="3.5"/><text class="t-lg" x="30" y="25">worker-c</text><text class="t-sm" x="176" y="25" text-anchor="end">Ready</text>
+      <text class="t-sm" x="14" y="50">pod CIDR 10.0.3.0/24</text>
+      <circle class="pod" cx="26" cy="76" r="7"/><circle class="pod" cx="48" cy="76" r="7"/><circle class="pod" cx="70" cy="76" r="7"/><circle class="pod" cx="92" cy="76" r="7"/>
+      <text class="t-md ok-only" x="14" y="112">routes: 3 / 3</text>
+      <text class="t-md err-only" x="14" y="112" style="fill:var(--err)">routes: 0 / 3</text>
+    </g>
+    <g transform="translate(720,330)">
+      <rect class="node" width="190" height="130" rx="8"/>
+      <circle class="ok" cx="18" cy="20" r="3.5"/><text class="t-lg" x="30" y="25">worker-d</text><text class="t-sm" x="176" y="25" text-anchor="end">Ready</text>
+      <text class="t-sm" x="14" y="50">pod CIDR 10.0.4.0/24</text>
+      <circle class="pod" cx="26" cy="76" r="7"/><circle class="pod" cx="48" cy="76" r="7"/>
+      <text class="t-md ok-only" x="14" y="112">routes: 3 / 3</text>
+      <text class="t-md err-only" x="14" y="112" style="fill:var(--err)">routes: 0 / 3</text>
+    </g>
+  </g>
+
+  <path class="p2p" d="M86 460 V500 H766 V460" marker-end="url(#ah-b)"/>
+  <g class="ok-only"><rect x="376" y="488" width="208" height="24" rx="12" fill="#000" stroke="rgba(69,222,197,.4)"/><text x="480" y="504" text-anchor="middle" style="fill:var(--ok);font-size:11.5px">10.0.1.7 to 10.0.4.3 ok</text></g>
+  <g class="err-only"><rect x="356" y="488" width="248" height="24" rx="12" fill="#000" stroke="var(--err)"/><text x="480" y="504" text-anchor="middle" style="fill:var(--err);font-size:11.5px">10.0.1.7 to 10.0.4.3 unreachable</text></g>
+</svg>
+</div></figure>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h"><h2>Failure chain</h2></div>
+    <div class="card chain">
+      <div class="step"><span class="bar" style="background:var(--line-2)"></span><div class="t">Upgrade</div><div class="d">1.23 to 1.24 on the oldest, largest cluster</div></div>
+      <div class="step"><span class="bar" style="background:var(--warn)"></span><div class="t">Label removed</div><div class="d">master replaced by control-plane</div></div>
+      <div class="step"><span class="bar" style="background:var(--warn)"></span><div class="t">Selector empty</div><div class="d">Calico RR selector matches 0 nodes</div></div>
+      <div class="step"><span class="bar" style="background:var(--err)"></span><div class="t">BGP collapses</div><div class="d">no reflectors, no pod routes</div></div>
+      <div class="step"><span class="bar" style="background:var(--err)"></span><div class="t">Pod network down</div><div class="d">pod to pod, DNS, Services fail</div></div>
+      <div class="step"><span class="bar" style="background:var(--err)"></span><div class="t">Reddit down</div><div class="d">314 minutes</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h"><h2>Why it hid</h2><p>Every signal on the control plane stayed green.</p></div>
+    <div class="two">
+      <div class="card">
+        <div class="matrix">
+          <div class="row"><div><span class="layer">control plane</span>kube-apiserver</div><span class="badge ok">healthy</span></div>
+          <div class="row"><div><span class="layer">control plane</span>etcd</div><span class="badge ok">healthy</span></div>
+          <div class="row"><div><span class="layer">control plane</span>scheduler</div><span class="badge ok">healthy</span></div>
+          <div class="row"><div><span class="layer">node</span>kubelet heartbeat, Node Ready</div><span class="badge ok">healthy</span></div>
+          <div class="row"><div><span class="layer">network</span>BGP route reflectors</div><span class="badge err">gone</span></div>
+          <div class="row"><div><span class="layer">network</span>pod to pod, CoreDNS, Services</div><span class="badge err">down</span></div>
+          <div class="row"><div><span class="layer">product</span>reddit.com</div><span class="badge err">down</span></div>
+        </div>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column">
+<pre><span class="c"># node object after upgrade</span>
+<span class="del">- node-role.kubernetes.io/master: ""</span><span class="add">+ node-role.kubernetes.io/control-plane: ""</span>
+<span class="c"># Calico BGP peering, hand-applied years earlier</span>
+<span class="hl">kind</span>: BGPPeer
+<span class="hl">spec</span>:
+  <span class="hl">peerSelector</span>: has(node-role.kubernetes.io/master)
+
+<span class="c"># evaluated against the upgraded cluster</span>
+matches: <span class="m0">0 nodes</span></pre>
+        <div class="callout" style="margin-top:auto;border-top:1px solid var(--line)">Kubelet heartbeats skip the pod network. <span>Nodes looked Ready while nothing could route.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h"><h2>Recovery</h2><p>Kubernetes has no supported downgrade. Rolling back meant restoring the control plane from backup.</p></div>
+    <div class="rec">
+      <div class="card decision">
+        <svg viewBox="0 0 520 380" role="img" aria-label="Decision tree: roll forward was blocked because the cause was unknown, downgrade was unsupported, so the team restored etcd from backup">
+          <defs><marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#666"/></marker></defs>
+          <g fill="none" stroke="#333" stroke-width="1" marker-end="url(#ah2)">
+            <path d="M260 78 V104 H100 V128"/><path d="M260 78 V104 H260 V128"/><path d="M260 78 V104 H420 V128"/>
+            <path d="M420 200 V242"/>
+          </g>
+          <rect x="150" y="30" width="220" height="48" rx="8" fill="#111" stroke="#333"/>
+          <text x="260" y="51" text-anchor="middle" class="t-lg">Site down</text>
+          <text x="260" y="68" text-anchor="middle" class="t-sm">cause unknown</text>
+
+          <rect x="20" y="130" width="160" height="70" rx="8" fill="none" stroke="#333" stroke-dasharray="3 3"/>
+          <text x="100" y="158" text-anchor="middle" class="t-md">Roll forward</text>
+          <text x="100" y="178" text-anchor="middle" style="fill:var(--err);font-size:10.5px">blocked: no root cause</text>
+
+          <rect x="190" y="130" width="140" height="70" rx="8" fill="none" stroke="#333" stroke-dasharray="3 3"/>
+          <text x="260" y="158" text-anchor="middle" class="t-md">Downgrade</text>
+          <text x="260" y="178" text-anchor="middle" style="fill:var(--err);font-size:10.5px">unsupported</text>
+
+          <rect x="340" y="130" width="160" height="70" rx="8" fill="rgba(245,165,36,.06)" stroke="rgba(245,165,36,.5)"/>
+          <text x="420" y="158" text-anchor="middle" style="fill:var(--warn);font-size:11.5px">Restore backup</text>
+          <text x="420" y="178" text-anchor="middle" class="t-sm">high risk, chosen</text>
+
+          <rect x="300" y="244" width="200" height="110" rx="8" fill="#111" stroke="#333"/>
+          <text x="316" y="270" class="t-sm">risk factors</text>
+          <text x="316" y="294" class="t-md">restore never run</text>
+          <text x="316" y="312" class="t-md">at this scale</text>
+          <text x="316" y="334" class="t-md">TLS, config drift</text>
+
+          <g transform="translate(20,244)">
+            <rect width="260" height="110" rx="8" fill="none" stroke="#1f1f1f"/>
+            <text x="16" y="26" class="t-sm">why no downgrade</text>
+            <text x="16" y="50" class="t-md">upgrade migrates stored</text>
+            <text x="16" y="68" class="t-md">objects forward. no</text>
+            <text x="16" y="86" class="t-md">reverse path exists.</text>
+          </g>
+        </svg>
+      </div>
+      <div class="card">
+        <div class="phases">
+          <div class="ph bad"><div class="b">1</div><div><div class="t">Upgrade starts, site fails</div><div class="d">pod network partitions</div></div></div>
+          <div class="ph hot"><div class="b">2</div><div><div class="t">Diagnose</div><div class="d">control plane green, data plane dead</div></div></div>
+          <div class="ph hot"><div class="b">3</div><div><div class="t">Decide to roll back</div><div class="d">hours, no known root cause</div></div></div>
+          <div class="ph hot"><div class="b">4</div><div><div class="t">Restore etcd backup</div><div class="d">rebuild control plane at 1.23</div></div></div>
+          <div class="ph hot"><div class="b">5</div><div><div class="t">Fix restore drift</div><div class="d">certs, component config</div></div></div>
+          <div class="ph good"><div class="b">6</div><div><div class="t">Reddit back</div><div class="d">traffic ramps, caches warm</div></div></div>
+          <div class="ph"><div class="b">7</div><div><div class="t">Root cause found</div><div class="d">RR selector on removed label</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h"><h2>Lessons</h2></div>
+    <div class="lessons">
+      <div class="lesson">
+        <div class="t">Grep the changelog</div>
+        <div class="d">Match every removed label, flag, and API against your own manifests before upgrading.</div>
+      </div>
+      <div class="lesson">
+        <div class="t">Kill snowflakes</div>
+        <div class="d">One hand-built cluster carried config no other cluster had. Drift from the standard build is a bug.</div>
+      </div>
+      <div class="lesson">
+        <div class="t">Drill restores</div>
+        <div class="d">A backup is a hypothesis until it is restored. Game-day etcd restores, certs included.</div>
+      </div>
+      <div class="lesson">
+        <div class="t">Probe the data plane</div>
+        <div class="d">Node Ready is not pod reachability. Alert on BGP peer count and pod to pod probes.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>Sources</div>
+    <div class="src">
+      <a href="https://www.reddit.com/r/RedditEng/comments/11xx5o0/you_broke_reddit_the_piday_outage/">You Broke Reddit: The Pi-Day Outage, r/RedditEng</a>
+      <a href="https://www.youtube.com/watch?v=J3VavGnt5Yg">Kubernetes Crash Course (A True Story), video</a>
+      <a href="https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.24.md">Kubernetes 1.24 changelog</a>
+      <a href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">Configure BGP peering, Calico docs</a>
+    </div>
+    <p style="margin-top:24px">Topology, node names, CIDRs, and the BGPPeer manifest are simplified for illustration.</p>
+  </div>
+</footer>
+
+</body>
+</html>
