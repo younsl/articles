@@ -661,22 +661,47 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
 <span class="del">curl: (28) Connection timed out after 3001 milliseconds</span><span class="hl">$</span> kubectl exec -it debug -- nslookup kubernetes.default
 <span class="del">;; connection timed out; no servers could be reached</span></pre></figure>
     <div class="prose"><p>이 비대칭이 결정적 단서였다. 노드도, 업링크도, 인터넷 연결도 살아 있었다. 끊긴 것은 <strong>클러스터 안에서 노드와 노드 사이를 잇는 파드 경로</strong>뿐이었다. 다른 노드에 있는 CoreDNS에 닿지 못하니 이름 해석까지 같이 실패했다.</p></div>
-    <figure class="card"><div class="scroll">
-<svg viewBox="0 0 960 380" role="img" aria-label="디버그 파드에서 본 세 경로: 같은 노드 파드는 로컬 라우트로 성공, 다른 노드 파드는 BGP 라우트가 없어 실패, 외부 인터넷은 기본 라우트와 SNAT으로 성공">
-  <defs><marker id="ac" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#45dec5"/></marker></defs>
-  <rect class="box" x="30" y="40" width="300" height="300" rx="12"/>
-  <text class="t-lg" x="50" y="70">worker-a</text>
-  <circle cx="78" cy="118" r="16" class="box-ok"/><text class="t-md" x="104" y="114">debug</text><text class="t-sm" x="104" y="130">10.0.1.7</text>
-  <text class="t-sm" x="50" y="176">$ ip route</text>
-  <text class="t-md" x="50" y="204" style="fill:var(--ok)">10.0.1.9 dev cali1a2b</text>
-  <text class="t-md" x="50" y="228" style="fill:var(--ok)">default via 10.0.100.1</text>
-  <text class="t-md" x="50" y="252" style="fill:var(--err)">10.0.4.0/24 (없음)</text>
-  <text class="t-sm ko" x="50" y="304">BGP 피어 0, bird 라우트 0</text>
-  <path d="M330 90H640" stroke="var(--ok)" stroke-width="1.5" fill="none" marker-end="url(#ac)"/><path d="M592 81l6 7 11-14" stroke="var(--ok)" stroke-width="2" fill="none"/><rect x="372" y="56" width="196" height="22" rx="11" fill="#000" stroke="var(--line-2)"/><text x="470" y="71" text-anchor="middle" class="ko" style="fill:var(--fg-2);font-size:11px">로컬 cali 인터페이스</text><rect class="box-ok" x="640" y="58" width="290" height="64" rx="10"/><text class="t-lg ko" x="660" y="84">같은 노드 파드</text><text class="t-sm" x="660" y="104">10.0.1.9, worker-a</text>
-  <path d="M330 190H640" stroke="var(--err)" stroke-width="1.5" fill="none" stroke-dasharray="5 5"/><path d="M594 182l14 14M608 182l-14 14" stroke="var(--err)" stroke-width="2"/><rect x="372" y="156" width="196" height="22" rx="11" fill="#000" stroke="var(--line-2)"/><text x="470" y="171" text-anchor="middle" class="ko" style="fill:var(--fg-2);font-size:11px">BGP 라우트 필요, 없음</text><rect class="box-err" x="640" y="158" width="290" height="64" rx="10"/><text class="t-lg ko" x="660" y="184">다른 노드 파드</text><text class="t-sm" x="660" y="204">10.0.4.3, worker-d</text>
-  <path d="M330 290H640" stroke="var(--ok)" stroke-width="1.5" fill="none" marker-end="url(#ac)"/><path d="M592 281l6 7 11-14" stroke="var(--ok)" stroke-width="2" fill="none"/><rect x="372" y="256" width="196" height="22" rx="11" fill="#000" stroke="var(--line-2)"/><text x="470" y="271" text-anchor="middle" class="ko" style="fill:var(--fg-2);font-size:11px">기본 라우트 + SNAT</text><rect class="box-ok" x="640" y="258" width="290" height="64" rx="10"/><text class="t-lg ko" x="660" y="284">외부 인터넷</text><text class="t-sm" x="660" y="304">example.com</text>
+    <figure class="card"><figcaption>클러스터 내부 구간</figcaption><div class="scroll">
+<svg viewBox="0 0 960 400" role="img" aria-label="클러스터 내부 구간: 같은 노드 파드는 로컬 cali 인터페이스로 성공, 다른 노드 파드는 BGP 라우트가 없어 실패">
+  <defs><marker id="ai" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#45dec5"/></marker></defs>
+  <rect x="20" y="30" width="920" height="350" rx="14" fill="none" stroke="#555" stroke-dasharray="6 5"/><rect x="44" y="19" width="76" height="22" rx="11" fill="#000" stroke="#555"/><text x="82.0" y="34" text-anchor="middle" class="ko" style="fill:#a1a1a1;font-size:11.5px">클러스터</text>
+  <rect x="48" y="76" width="430" height="280" rx="10" fill="#050505" stroke="#444"/><rect x="68" y="65" width="50" height="22" rx="11" fill="#000" stroke="#555"/><text x="93.0" y="80" text-anchor="middle" class="ko" style="fill:#a1a1a1;font-size:11.5px">노드</text>
+  <text class="t-lg" x="70" y="112">worker-a</text><text class="t-sm" x="458" y="112" text-anchor="end">10.0.100.11</text>
+  <circle cx="116" cy="180" r="16" class="box-ok"/><text class="t-md ko" x="116" y="214" text-anchor="middle">debug 파드</text><text class="t-sm" x="116" y="230" text-anchor="middle">10.0.1.7</text>
+  <circle cx="404" cy="138" r="16" class="box-ok"/><text class="t-md ko" x="404" y="172" text-anchor="middle">파드</text><text class="t-sm" x="404" y="188" text-anchor="middle">10.0.1.9</text>
+  <path d="M133 176L386 142" stroke="var(--ok)" stroke-width="1.5" fill="none" marker-end="url(#ai)"/>
+  <path d="M252 152l6 7 11-14" stroke="var(--ok)" stroke-width="2" fill="none"/>
+  <text x="262" y="134" text-anchor="middle" class="ko" style="fill:var(--ok);font-size:11.5px">로컬 cali 인터페이스</text>
+  <text class="t-sm" x="70" y="290">$ ip route</text>
+  <text class="t-md" x="70" y="312" style="fill:var(--ok)">10.0.1.9 dev cali1a2b</text>
+  <text class="t-md" x="70" y="334" style="fill:var(--err)">10.0.4.0/24  (없음)</text>
+  <rect x="640" y="76" width="272" height="280" rx="10" fill="#050505" stroke="#444"/><rect x="660" y="65" width="50" height="22" rx="11" fill="#000" stroke="#555"/><text x="685.0" y="80" text-anchor="middle" class="ko" style="fill:#a1a1a1;font-size:11.5px">노드</text>
+  <text class="t-lg" x="662" y="112">worker-d</text><text class="t-sm" x="892" y="112" text-anchor="end">10.0.100.14</text>
+  <circle cx="776" cy="224" r="16" class="box-err"/><text class="t-md ko" x="776" y="258" text-anchor="middle">파드</text><text class="t-sm" x="776" y="274" text-anchor="middle">10.0.4.3</text>
+  <path d="M133 184L758 223" stroke="var(--err)" stroke-width="1.5" stroke-dasharray="5 5" fill="none"/>
+  <path d="M553 202l14 14M567 202l-14 14" stroke="var(--err)" stroke-width="2"/>
+  <rect x="490" y="232" width="140" height="24" rx="12" fill="#000" stroke="var(--err)"/><text x="560" y="248" text-anchor="middle" class="ko" style="fill:var(--err);font-size:11.5px">BGP 라우트 없음</text>
+  <text x="560" y="290" text-anchor="middle" class="t-sm ko">노드 경계를 넘는 구간</text>
 </svg></div></figure>
-    <div class="prose"><p>세 요청은 노드 라우팅 테이블에서 서로 다른 줄을 탄다. 같은 노드의 파드는 Calico가 만든 로컬 <code>cali</code> 인터페이스로 바로 간다. 외부 인터넷은 <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/workloads-outside-cluster">Calico outgoing NAT</a>로 노드 IP로 바뀌어 기본 라우트로 나간다. 둘 다 BGP가 필요 없다.</p><p>다른 노드의 파드만 BGP로 배운 라우트가 있어야 한다. 그 라우트가 통째로 사라졌기 때문에, 장애는 <strong>노드 사이를 건너는 파드 트래픽에만</strong> 정확히 나타났다. 다음 섹션에서 그 라우팅 테이블을 직접 본다.</p></div>
+    <div class="prose"><p>같은 노드의 파드는 Calico가 만든 로컬 <code>cali</code> 인터페이스로 바로 간다. 이 라우트는 노드가 스스로 만들기 때문에 BGP가 필요 없다.</p><p>다른 노드의 파드는 다르다. 노드 사이를 건너려면 BGP로 배운 <code>10.0.4.0/24</code> 같은 라우트가 있어야 하는데, 그 라우트가 통째로 사라졌다.</p></div>
+    <figure class="card"><figcaption>클러스터 외부 구간</figcaption><div class="scroll">
+<svg viewBox="0 0 960 360" role="img" aria-label="클러스터 외부 구간: 노드 안에서 SNAT로 출발지가 노드 IP로 바뀌고 기본 라우트로 클러스터 밖 example.com에 도달한다">
+  <defs><marker id="ae" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#45dec5"/></marker></defs>
+  <rect x="20" y="30" width="680" height="280" rx="14" fill="none" stroke="#555" stroke-dasharray="6 5"/><rect x="44" y="19" width="76" height="22" rx="11" fill="#000" stroke="#555"/><text x="82.0" y="34" text-anchor="middle" class="ko" style="fill:#a1a1a1;font-size:11.5px">클러스터</text>
+  <rect x="40" y="76" width="640" height="212" rx="10" fill="#050505" stroke="#444"/><rect x="60" y="65" width="50" height="22" rx="11" fill="#000" stroke="#555"/><text x="85.0" y="80" text-anchor="middle" class="ko" style="fill:#a1a1a1;font-size:11.5px">노드</text>
+  <text class="t-lg" x="62" y="112">worker-a</text><text class="t-sm" x="660" y="112" text-anchor="end">10.0.100.11</text>
+  <rect class="box-ok" x="58" y="138" width="180" height="80" rx="10"/><text class="t-lg ko" x="76" y="170">debug 파드</text><text class="t-sm" x="76" y="194">src 10.0.1.7</text><path d="M238 178H264" stroke="var(--ok)" stroke-width="1.5" fill="none" marker-end="url(#ae)"/>
+  <rect class="box" x="266" y="138" width="180" height="80" rx="10"/><text class="t-lg ko" x="284" y="170">SNAT</text><text class="t-sm" x="284" y="194">src 10.0.100.11</text><path d="M446 178H472" stroke="var(--ok)" stroke-width="1.5" fill="none" marker-end="url(#ae)"/>
+  <rect class="box" x="474" y="138" width="180" height="80" rx="10"/><text class="t-lg ko" x="492" y="170">기본 라우트</text><text class="t-sm" x="492" y="194">via 10.0.100.1</text>
+  <text x="356" y="250" text-anchor="middle" class="ko" style="fill:var(--fg-3);font-size:11px">출발지를 파드 IP에서 노드 IP로 변경</text>
+  <rect x="720" y="30" width="220" height="280" rx="14" fill="none" stroke="#555" stroke-dasharray="6 5"/><rect x="744" y="19" width="96" height="22" rx="11" fill="#000" stroke="#555"/><text x="792.0" y="34" text-anchor="middle" class="ko" style="fill:#a1a1a1;font-size:11.5px">클러스터 밖</text>
+  <path d="M654 178H770" stroke="var(--ok)" stroke-width="1.5" fill="none" marker-end="url(#ae)"/>
+  <rect class="box-ok" x="772" y="138" width="152" height="80" rx="10"/><text class="t-lg" x="790" y="170">example.com</text><text class="t-sm" x="790" y="194">HTTP 200</text>
+  <path d="M896 158l6 7 11-14" stroke="var(--ok)" stroke-width="2" fill="none"/>
+  <text x="830" y="250" text-anchor="middle" class="t-sm ko">인터넷</text>
+  <text x="480" y="340" text-anchor="middle" class="ko" style="fill:var(--fg-2);font-size:12.5px">응답은 노드 IP로 돌아오고, 노드가 다시 파드로 넘긴다. BGP 라우트는 한 번도 쓰지 않는다.</text>
+</svg></div></figure>
+    <div class="prose"><p>외부로 나가는 요청은 <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/workloads-outside-cluster">Calico outgoing NAT</a>로 출발지가 노드 IP로 바뀐 뒤 기본 라우트를 탄다. 이 경로 역시 BGP를 쓰지 않는다.</p><p>그래서 장애는 <strong>노드 사이를 건너는 파드 트래픽에만</strong> 정확히 나타났다. 바깥에서 보면 네트워크는 멀쩡했고, 안에서는 파드끼리만 서로를 잃었다. 다음 섹션에서 그 라우팅 테이블을 직접 본다.</p></div>
   </div>
 </section>
 
