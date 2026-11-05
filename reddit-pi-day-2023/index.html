@@ -193,37 +193,6 @@ footer .src { display: grid; gap: 8px; margin-top: 12px; }
 footer a { color: var(--fg-2); border-bottom: 1px solid var(--line-2); }
 footer a:hover { color: var(--fg); }
 
-@media (max-width: 860px) {
-  .stats { grid-template-columns: 1fr 1fr; }
-  .stat:nth-child(2) { border-right: 0; }
-  .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
-  .chain { grid-template-columns: 1fr 1fr; }
-  .step { border-bottom: 1px solid var(--line); }
-  .step:nth-child(2n) { border-right: 0; }
-  .step:nth-last-child(-n+2) { border-bottom: 0; }
-  .step::after { display: none; }
-  .two, .rec { grid-template-columns: minmax(0,1fr); }
-  .ctx, .ctx.two-col { grid-template-columns: minmax(0,1fr); }
-  .ctx > div { border-right: 0; border-bottom: 1px solid var(--line); }
-  .ctx > div:last-child { border-bottom: 0; }
-  .ver { grid-template-columns: minmax(0,1fr); gap: 14px; }
-  .ver::before { left: 24px; right: auto; top: 26px; bottom: 26px; width: 1px; height: auto; }
-  .ver > div { padding: 0 0 0 22px; }
-  .ver > div::before { top: 4px; }
-  .lessons { grid-template-columns: 1fr 1fr; }
-  .lesson:nth-child(2n) { border-right: 0; }
-  .lesson:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
-}
-@media (max-width: 480px) {
-  .mesh { grid-template-columns: minmax(0,1fr); }
-  .mesh > div { border-right: 0; border-bottom: 1px solid var(--line); }
-  .mesh > div:last-child { border-bottom: 0; }
-  header { padding: 56px 0 40px; }
-  .stat .v { font-size: 32px; }
-  .chain, .lessons { grid-template-columns: 1fr; }
-  .step, .lesson { border-right: 0 !important; border-bottom: 1px solid var(--line) !important; }
-  .step:last-child, .lesson:last-child { border-bottom: 0 !important; }
-}
 
 .lblfx * { animation-duration: 9s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
 .fx-hl { fill: rgba(255,97,102,0); animation-name: fxHl; }
@@ -253,21 +222,26 @@ footer a:hover { color: var(--fg); }
   .fx-rr { fill: #000; stroke: var(--line-2); }
 }
 
-.upg th, .upg td { padding: 10px 10px; }
 .vc { display: inline-block; margin: 2px 4px 2px 0; }
-@media (max-width: 640px) {
-  .upg th, .upg td { white-space: normal; padding: 8px 6px; font-size: 11px; }
-  .upg td:first-child { font-size: 11px; }
-  .vc { font-size: 10px; padding: 1px 5px; }
-  .num { font-size: 15px; }
-  .prose p { font-size: 15px; }
-}
 
-figure svg.m { display: none; }
+
+.stats, .chain, .ver { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.stats { grid-template-columns: repeat(4, minmax(150px, 1fr)); }
+.chain { grid-template-columns: repeat(6, minmax(128px, 1fr)); }
+.ver { grid-template-columns: repeat(4, minmax(160px, 1fr)); }
+.upg table { min-width: 640px; }
+.decision { overflow-x: auto; }
 @media (max-width: 640px) {
-  figure svg.d { display: none !important; }
-  figure svg.m { display: block; width: 100%; height: auto; max-width: 420px; margin: 0 auto; padding: 4px 0; }
-  .decision svg.m { max-width: 420px; }
+  .scroll svg { min-width: 720px; }
+  .decision svg { min-width: 520px; }
+  .stats { grid-template-columns: repeat(4, 160px); }
+  .chain { grid-template-columns: repeat(6, 150px); }
+  .ver { grid-template-columns: repeat(4, 180px); }
+  .ver::before { right: auto; width: 680px; }
+  .mesh1 .mesh-row { flex-wrap: nowrap; min-width: 520px; }
+  .mesh1 { overflow-x: auto; }
+  header { padding: 56px 0 40px; }
+  .prose p { font-size: 15px; }
 }
 
 .verdict { font-size: clamp(26px, 4vw, 40px); font-weight: 600; letter-spacing: -.03em; line-height: 1.3; margin: 0 0 36px; max-width: 900px; }
@@ -319,7 +293,7 @@ figcaption.ok { color: var(--ok); }
     <div class="sec-h"><h2>3월 14일</h2><p>왜 "Pi-Day 장애"라고 부르나.</p></div>
     <div class="prose"><p>장애는 <strong>2023년 3월 14일 화요일</strong>에 일어났다. 3월 14일은 원주율 π의 앞자리 3.14와 같아 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Pi_Day">파이 데이(Pi Day)</a>로 불린다.</p></div>
     <figure class="card"><div class="scroll">
-<svg class="d" viewBox="0 0 960 300" role="img" aria-label="2023년 3월 14일, 파이 데이. 날짜 3.14, 원주율 3.14159, 장애 시간 314분이 같은 숫자로 겹친다">
+<svg viewBox="0 0 960 300" role="img" aria-label="2023년 3월 14일, 파이 데이. 날짜 3.14, 원주율 3.14159, 장애 시간 314분이 같은 숫자로 겹친다">
   <rect class="box" x="60" y="40" width="220" height="220" rx="16"/>
   <path d="M61 92V56a15 15 0 0 1 15-15H264a15 15 0 0 1 15 15V92Z" fill="rgba(255,97,102,.12)"/>
   <text x="170" y="74" text-anchor="middle" style="fill:var(--err);font-size:15px;letter-spacing:3px">MAR 2023</text>
@@ -334,22 +308,7 @@ figcaption.ok { color: var(--ok); }
   <text x="810" y="88" text-anchor="middle" class="ko" style="fill:var(--err);font-size:14px">장애 시간</text>
   <text x="810" y="186" text-anchor="middle" style="fill:var(--err);font:600 88px var(--sans);letter-spacing:-4px">314</text>
   <text x="810" y="230" text-anchor="middle" class="ko" style="fill:var(--fg-2);font-size:15px">분, 약 5시간 14분</text>
-</svg>
-<svg class="m" viewBox="0 0 360 560" role="img" aria-label="2023년 3월 14일, 파이 데이, 원주율 3.14, 장애 시간 314분">
-  <rect class="box" x="80" y="10" width="200" height="160" rx="16"/>
-  <path d="M81 52V26a15 15 0 0 1 15-15H264a15 15 0 0 1 15 15V52Z" fill="rgba(255,97,102,.12)"/>
-  <text x="180" y="38" text-anchor="middle" style="fill:var(--err);font-size:13px;letter-spacing:3px">MAR 2023</text>
-  <text x="180" y="128" text-anchor="middle" style="fill:var(--fg);font:600 64px var(--sans);letter-spacing:-3px">14</text>
-  <text x="180" y="156" text-anchor="middle" class="ko" style="fill:var(--fg-3);font-size:13px">화요일</text>
-  <text x="180" y="208" text-anchor="middle" style="fill:var(--fg-3);font:300 36px var(--sans)">=</text>
-  <rect class="zone" x="80" y="225" width="200" height="140" rx="16"/>
-  <text x="180" y="318" text-anchor="middle" style="fill:var(--fg);font:400 88px Georgia, 'Times New Roman', serif">π</text>
-  <text x="180" y="350" text-anchor="middle" style="fill:var(--fg-2);font-size:15px">3.14159…</text>
-  <text x="180" y="403" text-anchor="middle" style="fill:var(--fg-3);font:300 36px var(--sans)">=</text>
-  <rect x="80" y="420" width="200" height="130" rx="16" fill="rgba(255,97,102,.05)" stroke="rgba(255,97,102,.5)"/>
-  <text x="180" y="446" text-anchor="middle" class="ko" style="fill:var(--err);font-size:13px">장애 시간</text>
-  <text x="180" y="512" text-anchor="middle" style="fill:var(--err);font:600 64px var(--sans);letter-spacing:-3px">314</text>
-  <text x="180" y="538" text-anchor="middle" class="ko" style="fill:var(--fg-2);font-size:13px">분, 약 5시간 14분</text></svg></div></figure>
+</svg></div></figure>
     <div class="prose"><p>공교롭게도 사이트가 멈춰 있던 시간도 <strong>314분</strong>이었다. 날짜와 장애 시간이 모두 π를 닮았고, Reddit 엔지니어링 팀은 포스트모템 제목을 <a target="_blank" rel="noopener" href="https://www.reddit.com/r/RedditEng/comments/11xx5o0/you_broke_reddit_the_piday_outage/">You Broke Reddit: The Pi-Day Outage</a>로 붙였다.</p></div>
   </div>
 </section>
@@ -358,7 +317,7 @@ figcaption.ok { color: var(--ok); }
   <div class="wrap">
     <div class="sec-h"><h2>발단</h2><p>장애 전, 이 클러스터는 어떤 곳이었나.</p></div>
     <div class="prose"><p>Reddit은 여러 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes">Kubernetes</a> 클러스터 위에서 돈다. 그중 <strong>가장 오래되고 가장 큰 클러스터</strong>에 사이트의 레거시 코어가 올라가 있었다.</p></div><figure class="card"><div class="scroll">
-<svg class="d" viewBox="0 0 960 330" role="img" aria-label="Reddit 클러스터 구성: 표준 빌드 클러스터들과 별개로, 가장 오래되고 큰 레거시 코어 클러스터가 수작업 Calico 설정을 품고 있었다">
+<svg viewBox="0 0 960 330" role="img" aria-label="Reddit 클러스터 구성: 표준 빌드 클러스터들과 별개로, 가장 오래되고 큰 레거시 코어 클러스터가 수작업 Calico 설정을 품고 있었다">
   <defs><marker id="af" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#666"/></marker></defs>
   <rect class="box" x="380" y="24" width="200" height="44" rx="22"/><text class="t-lg ko" x="480" y="51" text-anchor="middle">reddit.com 트래픽</text>
   <path class="ln" d="M440 68V96H210V120" marker-end="url(#af)"/><path class="ln" d="M520 68V96H730V120" marker-end="url(#af)"/>
@@ -378,21 +337,8 @@ figcaption.ok { color: var(--ok); }
   </g>
   <text x="898" y="296" text-anchor="end" class="t-sm ko">설정이 서로 같음</text>
 </svg>
-<svg class="m" viewBox="0 0 360 500" role="img" aria-label="Reddit 클러스터 구성: 표준 빌드 클러스터들과 별개로 레거시 코어 클러스터가 수작업 Calico 설정을 품고 있었다">
-  <defs><marker id="afm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#666"/></marker></defs>
-  <rect class="box" x="100" y="8" width="160" height="38" rx="19"/><text class="t-lg ko" x="180" y="32" text-anchor="middle">reddit.com 트래픽</text>
-  <path class="ln" d="M150 46V66" marker-end="url(#afm)"/><path class="ln" d="M210 46V58H340V282" marker-end="url(#afm)"/>
-  <rect x="10" y="68" width="340" height="186" rx="12" fill="rgba(255,97,102,.04)" stroke="rgba(255,97,102,.5)"/>
-  <text class="t-lg ko" x="24" y="96">레거시 코어 클러스터</text><text class="t-sm ko" x="336" y="96" text-anchor="end">가장 오래되고 가장 큼</text>
-  <rect class="chip" x="24" y="110" width="312" height="30" rx="6"/><text x="38" y="130" class="ko t-md">표준 도구가 생기기 전에 구축</text><rect class="chip" x="24" y="148" width="312" height="30" rx="6"/><text x="38" y="168" class="ko t-md">Calico BGP 리플렉터 설정을 손으로 적용</text><rect class="chip" x="24" y="186" width="312" height="30" rx="6"/><text x="38" y="206" class="ko t-md">설정을 만든 엔지니어는 이미 이동</text>
-  <text x="336" y="242" text-anchor="end" class="ko" style="fill:var(--err);font-size:11px">스노우플레이크</text>
-  <rect class="zone" x="10" y="284" width="340" height="206" rx="12"/>
-  <text class="t-lg ko" x="24" y="312">표준 빌드 클러스터</text><text class="t-sm ko" x="336" y="312" text-anchor="end">공통 도구, 공통 설정</text>
-  <rect class="box" x="24" y="330" width="96" height="120" rx="8"/><rect class="box" x="132" y="330" width="96" height="120" rx="8"/><rect class="box" x="240" y="330" width="96" height="120" rx="8"/>
-  <text class="t-sm" x="72" y="394" text-anchor="middle">cluster</text><text class="t-sm" x="180" y="394" text-anchor="middle">cluster</text><text class="t-sm" x="288" y="394" text-anchor="middle">cluster</text>
-  <text x="336" y="476" text-anchor="end" class="t-sm ko">설정이 서로 같음</text></svg>
 </div></figure><div class="prose"><p>이 클러스터는 표준 도구가 생기기 전에 만들어졌다. 다른 클러스터와 달리 <strong><a target="_blank" rel="noopener" href="https://github.com/projectcalico/calico">Calico</a> <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">BGP</a> 설정을 손으로 넣은</strong> 상태였고, 그 설정을 만든 엔지니어들은 이미 다른 곳으로 옮긴 뒤였다. 누구도 이 설정이 노드 라벨에 의존한다는 사실을 기억하지 못했다.</p><p>Kubernetes 업그레이드 자체는 여러 번 해 온 일상 작업이었다. 2023년 3월 14일 파이 데이, 이 클러스터를 1.23에서 1.24로 올리는 작업이 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/">평소 절차</a>대로 시작됐다.</p></div><figure class="card"><div class="scroll">
-<svg class="d" viewBox="0 0 960 210" role="img" aria-label="계획된 업그레이드 절차: etcd 백업, 컨트롤 플레인 한 대씩, 워커, 검증. 두 번째 단계에서 장애 발생">
+<svg viewBox="0 0 960 210" role="img" aria-label="계획된 업그레이드 절차: etcd 백업, 컨트롤 플레인 한 대씩, 워커, 검증. 두 번째 단계에서 장애 발생">
   <defs><marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#666"/></marker></defs>
   <g>
     <rect class="box" x="30" y="50" width="196" height="92" rx="10"/>
@@ -413,17 +359,6 @@ figcaption.ok { color: var(--ok); }
   <rect x="288" y="170" width="148" height="26" rx="13" fill="#000" stroke="var(--err)"/><text x="362" y="187" text-anchor="middle" class="ko" style="fill:var(--err);font-size:11.5px">여기서 사이트 중단</text>
   <text x="713" y="170" text-anchor="middle" class="t-sm ko">도달하지 못함</text>
 </svg>
-<svg class="m" viewBox="0 0 360 450" role="img" aria-label="계획된 업그레이드 절차: etcd 백업, 컨트롤 플레인 한 대씩, 워커, 검증. 두 번째 단계에서 장애 발생">
-  <defs><marker id="agm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#666"/></marker></defs>
-  <rect class="box" x="40" y="10" width="280" height="70" rx="10"/><text x="58" y="36" class="t-sm">01</text><text class="t-lg ko" x="88" y="40">etcd 백업</text><text class="t-sm ko" x="88" y="60">되돌아올 지점 확보</text>
-  <path class="ln" d="M180 80V108" marker-end="url(#agm)"/>
-  <rect class="box-err" x="40" y="110" width="280" height="70" rx="10"/><text x="58" y="136" class="t-sm" style="fill:var(--err)">02</text><text class="t-lg ko" x="88" y="140">컨트롤 플레인</text><text class="t-sm ko" x="88" y="160">한 대씩 1.24로</text>
-  <rect x="190" y="160" width="124" height="22" rx="11" fill="#000" stroke="var(--err)"/><text x="252" y="175" text-anchor="middle" class="ko" style="fill:var(--err);font-size:11px">여기서 사이트 중단</text>
-  <g opacity=".4"><path class="ln" d="M180 180V228" marker-end="url(#agm)"/>
-  <rect class="box" x="40" y="230" width="280" height="70" rx="10" stroke-dasharray="4 4"/><text x="58" y="256" class="t-sm">03</text><text class="t-lg ko" x="88" y="260">워커 노드</text><text class="t-sm ko" x="88" y="280">순차 업그레이드</text>
-  <path class="ln" d="M180 300V328" marker-end="url(#agm)"/>
-  <rect class="box" x="40" y="330" width="280" height="70" rx="10" stroke-dasharray="4 4"/><text x="58" y="356" class="t-sm">04</text><text class="t-lg ko" x="88" y="360">검증</text><text class="t-sm ko" x="88" y="380">트래픽, 지표 확인</text></g>
-  <text x="180" y="432" text-anchor="middle" class="t-sm ko">03, 04 단계는 도달하지 못함</text></svg>
 </div></figure><div class="prose"><p>절차는 두 번째 단계에서 멈췄다. <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/overview/components/">컨트롤 플레인</a> 노드가 1.24가 되는 순간, 사이트 전체가 응답을 멈췄다. 워커 노드는 아직 손대지도 않은 상태였다.</p></div>
   </div>
 </section>
@@ -432,7 +367,7 @@ figcaption.ok { color: var(--ok); }
   <div class="wrap">
     <div class="sec-h"><h2>배경</h2><p>장애를 이해하는 데 필요한 Kubernetes와 Calico 기본기.</p></div>
     <div class="prose"><p><a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes">Kubernetes</a>는 "이 컨테이너를 이만큼 띄워라" 같은 <strong><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/overview/">원하는 상태</a></strong>를 선언하면, 수많은 머신 위에서 그 상태를 계속 유지해 주는 시스템이다. 머신 한 대가 죽어도 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/overview/components/">컨트롤 플레인</a>이 알아서 다른 곳에 다시 띄운다.</p></div><figure class="card"><div class="scroll">
-<svg class="d" viewBox="0 0 960 300" role="img" aria-label="클러스터 구조: 컨트롤 플레인 컴포넌트는 API 서버로 통신하고, kubelet은 노드 IP로 보고하며, calico-node가 파드 라우트를 설치한다">
+<svg viewBox="0 0 960 300" role="img" aria-label="클러스터 구조: 컨트롤 플레인 컴포넌트는 API 서버로 통신하고, kubelet은 노드 IP로 보고하며, calico-node가 파드 라우트를 설치한다">
   <defs><marker id="am" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#666"/></marker></defs>
   <rect class="zone" x="30" y="30" width="430" height="240" rx="12"/><text class="ko t-sm" x="48" y="52" letter-spacing="1.5">컨트롤 플레인 노드</text>
   <rect class="zone" x="500" y="30" width="430" height="240" rx="12"/><text class="ko t-sm" x="518" y="52" letter-spacing="1.5">워커 노드</text>
@@ -450,23 +385,6 @@ figcaption.ok { color: var(--ok); }
   <path class="ln" d="M530 102H430" marker-end="url(#am)"/><text class="ko t-sm" x="480" y="92" text-anchor="middle" style="fill:var(--fg-2)">노드 IP</text>
   <path d="M820 132V182" stroke="var(--ok)" fill="none" marker-end="url(#am)"/><text x="830" y="162" class="ko t-sm" style="fill:var(--ok)">파드 라우트</text>
 </svg>
-<svg class="m" viewBox="0 0 360 600" role="img" aria-label="클러스터 구조: 컨트롤 플레인 컴포넌트는 API 서버로 통신하고, kubelet은 노드 IP로 보고하며, calico-node가 파드 라우트를 설치한다">
-  <defs><marker id="amm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#666"/></marker><marker id="amm2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#45dec5"/></marker></defs>
-  <rect class="zone" x="6" y="10" width="348" height="250" rx="12"/><text class="t-sm ko" x="20" y="32">컨트롤 플레인 노드</text>
-  <rect class="box" x="20" y="48" width="148" height="56" rx="8"/><text class="t-lg" x="32" y="72">etcd</text><text class="t-sm ko" x="32" y="91">클러스터 상태 전체</text>
-  <rect class="box" x="192" y="48" width="148" height="56" rx="8"/><text class="t-lg" x="204" y="72">kube-apiserver</text><text class="t-sm ko" x="204" y="91">모든 요청의 관문</text>
-  <rect class="box" x="20" y="180" width="148" height="56" rx="8"/><text class="t-lg" x="32" y="204">kube-scheduler</text><text class="t-sm ko" x="32" y="223">파드마다 노드 배정</text>
-  <rect class="box" x="192" y="180" width="148" height="56" rx="8"/><text class="t-lg" x="204" y="204">컨트롤러</text><text class="t-sm ko" x="204" y="223">원하는 상태로 수렴</text>
-  <path class="ln" d="M192 90H170" marker-end="url(#amm)"/>
-  <path class="ln" d="M94 180V150H250V106" marker-end="url(#amm)"/>
-  <path class="ln" d="M300 180V106" marker-end="url(#amm)"/>
-  <rect class="zone" x="6" y="320" width="348" height="270" rx="12"/><text class="t-sm ko" x="20" y="342">워커 노드</text>
-  <rect class="box" x="20" y="358" width="148" height="56" rx="8"/><text class="t-lg" x="32" y="382">kubelet</text><text class="t-sm ko" x="32" y="401">파드 실행, Ready 보고</text>
-  <rect class="box-ok" x="192" y="358" width="148" height="56" rx="8"/><text class="t-lg" x="204" y="382">calico-node</text><text class="t-sm ko" x="204" y="401">BGP 에이전트, 라우트</text>
-  <rect class="box" x="20" y="500" width="320" height="70" rx="8"/><text class="t-lg ko" x="32" y="526">파드</text><text class="t-sm" x="32" y="548">10.0.1.0/24</text>
-  <circle class="pod" cx="250" cy="535" r="7"/><circle class="pod" cx="274" cy="535" r="7"/><circle class="pod" cx="298" cy="535" r="7"/>
-  <path class="ln" d="M94 358V296H180V62H190" marker-end="url(#amm)"/><text x="100" y="290" class="ko" style="fill:var(--fg-2);font-size:11px">노드 IP로 보고</text>
-  <path d="M266 414V498" stroke="var(--ok)" fill="none" marker-end="url(#amm2)"/><text x="274" y="460" class="ko" style="fill:var(--ok);font-size:11px">파드 라우트</text></svg>
 </div></figure><div class="prose"><p>컨트롤 플레인의 모든 컴포넌트는 <strong><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/">kube-apiserver</a></strong>를 거쳐서만 대화하고, 클러스터 상태는 전부 <strong><a target="_blank" rel="noopener" href="https://github.com/etcd-io/etcd">etcd</a></strong>에 저장된다. 워커 노드의 <strong><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/">kubelet</a></strong>은 노드 IP로 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/">API 서버</a>에 접속해 "나는 살아 있다(<a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/architecture/nodes/">Ready</a>)"고 주기적으로 보고한다.</p><p>파드끼리의 통신은 Kubernetes가 직접 하지 않는다. <strong><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/">CNI 플러그인</a></strong>이 노드마다 파드 CIDR을 나눠 주고, 어느 노드에서든 모든 파드 IP에 닿도록 만든다. Reddit은 CNI로 <strong><a target="_blank" rel="noopener" href="https://github.com/projectcalico/calico">Calico</a></strong>를 썼다.</p><p>Calico의 <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">BGP</a> 모드에서는 노드마다 BGP 에이전트(<a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/reference/configure-calico-node">calico-node</a>)가 돌며 "10.0.1.0/24는 나에게 보내라"는 식으로 자기 파드 CIDR을 광고한다. 다른 노드는 이를 받아 커널 라우팅 테이블에 일반 라우트로 설치한다. 오버레이도 캡슐화도 없다.</p></div><figure class="card mesh1"><figcaption class="">풀 메시, Calico 기본값</figcaption><div class="mesh-row"><svg viewBox="0 0 220 200" aria-label="노드 8대 풀 메시, BGP 세션 28개"><g stroke="#666" stroke-width=".8" opacity=".7"><line x1="110.0" y1="22.0" x2="165.2" y2="44.8"/><line x1="110.0" y1="22.0" x2="188.0" y2="100.0"/><line x1="110.0" y1="22.0" x2="165.2" y2="155.2"/><line x1="110.0" y1="22.0" x2="110.0" y2="178.0"/><line x1="110.0" y1="22.0" x2="54.8" y2="155.2"/><line x1="110.0" y1="22.0" x2="32.0" y2="100.0"/><line x1="110.0" y1="22.0" x2="54.8" y2="44.8"/><line x1="165.2" y1="44.8" x2="188.0" y2="100.0"/><line x1="165.2" y1="44.8" x2="165.2" y2="155.2"/><line x1="165.2" y1="44.8" x2="110.0" y2="178.0"/><line x1="165.2" y1="44.8" x2="54.8" y2="155.2"/><line x1="165.2" y1="44.8" x2="32.0" y2="100.0"/><line x1="165.2" y1="44.8" x2="54.8" y2="44.8"/><line x1="188.0" y1="100.0" x2="165.2" y2="155.2"/><line x1="188.0" y1="100.0" x2="110.0" y2="178.0"/><line x1="188.0" y1="100.0" x2="54.8" y2="155.2"/><line x1="188.0" y1="100.0" x2="32.0" y2="100.0"/><line x1="188.0" y1="100.0" x2="54.8" y2="44.8"/><line x1="165.2" y1="155.2" x2="110.0" y2="178.0"/><line x1="165.2" y1="155.2" x2="54.8" y2="155.2"/><line x1="165.2" y1="155.2" x2="32.0" y2="100.0"/><line x1="165.2" y1="155.2" x2="54.8" y2="44.8"/><line x1="110.0" y1="178.0" x2="54.8" y2="155.2"/><line x1="110.0" y1="178.0" x2="32.0" y2="100.0"/><line x1="110.0" y1="178.0" x2="54.8" y2="44.8"/><line x1="54.8" y1="155.2" x2="32.0" y2="100.0"/><line x1="54.8" y1="155.2" x2="54.8" y2="44.8"/><line x1="32.0" y1="100.0" x2="54.8" y2="44.8"/></g><g fill="#000" stroke="#a1a1a1"><circle cx="110.0" cy="22.0" r="6"/><circle cx="165.2" cy="44.8" r="6"/><circle cx="188.0" cy="100.0" r="6"/><circle cx="165.2" cy="155.2" r="6"/><circle cx="110.0" cy="178.0" r="6"/><circle cx="54.8" cy="155.2" r="6"/><circle cx="32.0" cy="100.0" r="6"/><circle cx="54.8" cy="44.8" r="6"/></g></svg><div class="n">4,950<small>세션, 노드 100대 기준</small></div></div></figure><div class="prose"><p>기본값은 모든 노드가 다른 모든 노드와 직접 BGP 세션을 맺는 <strong><a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">풀 메시</a></strong>다. 세션 수가 n(n-1)/2로 늘어나기 때문에, Calico 문서는 노드 100대 안팎부터 다른 방식을 권한다.</p></div><figure class="card mesh1"><figcaption class="ok">라우트 리플렉터</figcaption><div class="mesh-row"><svg viewBox="0 0 220 200" aria-label="라우트 리플렉터 2대와 클라이언트 6대, BGP 세션 13개"><g stroke="#45dec5" stroke-width=".8" opacity=".5"><line x1="150.0" y1="30.7" x2="80" y2="100"/><line x1="150.0" y1="30.7" x2="140" y2="100"/><line x1="190.0" y1="100.0" x2="80" y2="100"/><line x1="190.0" y1="100.0" x2="140" y2="100"/><line x1="150.0" y1="169.3" x2="80" y2="100"/><line x1="150.0" y1="169.3" x2="140" y2="100"/><line x1="70.0" y1="169.3" x2="80" y2="100"/><line x1="70.0" y1="169.3" x2="140" y2="100"/><line x1="30.0" y1="100.0" x2="80" y2="100"/><line x1="30.0" y1="100.0" x2="140" y2="100"/><line x1="70.0" y1="30.7" x2="80" y2="100"/><line x1="70.0" y1="30.7" x2="140" y2="100"/></g><line x1="80" y1="100" x2="140" y2="100" stroke="#45dec5"/><circle cx="150.0" cy="30.7" r="6" fill="#000" stroke="#a1a1a1"/><circle cx="190.0" cy="100.0" r="6" fill="#000" stroke="#a1a1a1"/><circle cx="150.0" cy="169.3" r="6" fill="#000" stroke="#a1a1a1"/><circle cx="70.0" cy="169.3" r="6" fill="#000" stroke="#a1a1a1"/><circle cx="30.0" cy="100.0" r="6" fill="#000" stroke="#a1a1a1"/><circle cx="70.0" cy="30.7" r="6" fill="#000" stroke="#a1a1a1"/><g fill="rgba(69,222,197,.15)" stroke="#45dec5"><circle cx="80" cy="100" r="9"/><circle cx="140" cy="100" r="9"/></g><text x="80" y="124" text-anchor="middle" class="t-sm" style="fill:#45dec5">RR</text><text x="140" y="124" text-anchor="middle" class="t-sm" style="fill:#45dec5">RR</text></svg><div class="n">294<small>세션, 노드 100대, 리플렉터 3대</small></div></div></figure><div class="prose"><p><strong><a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">라우트 리플렉터</a></strong>는 라우트를 중계하는 BGP 피어다. 노드는 리플렉터 몇 대와만 세션을 맺고, 리플렉터가 받은 라우트를 다른 노드에 다시 뿌린다. 큰 클러스터는 풀 메시를 끄고 리플렉터에만 의존한다.</p><p>이 구조의 대가는 분명하다. 풀 메시를 끈 상태에서 <strong>리플렉터가 하나도 없으면, 어떤 노드도 다른 노드의 파드 라우트를 배우지 못한다.</strong></p></div>
   </div>
 </section>
@@ -475,7 +393,7 @@ figcaption.ok { color: var(--ok); }
   <div class="wrap">
     <div class="sec-h"><h2>아키텍처</h2><p>Reddit 레거시 클러스터의 BGP 토폴로지 (단순화).</p></div>
     <div class="prose"><p>이 클러스터의 <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">라우트 리플렉터</a>는 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/overview/components/">컨트롤 플레인</a> 노드 위에서 돌았다. 워커 노드는 리플렉터와 <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">BGP</a> 세션을 맺어 다른 노드의 파드 CIDR을 배웠다.</p></div><figure class="card"><figcaption class="">1.23, 정상</figcaption><div class="scroll">
-<svg class="d arch" data-v="123" viewBox="0 0 960 560" role="img">
+<svg class="arch" data-v="123" viewBox="0 0 960 560" role="img">
   <title>Calico BGP 토폴로지: 워커 노드는 node-role.kubernetes.io/master 라벨로 선택된 컨트롤 플레인 노드의 라우트 리플렉터와 피어링한다</title>
   <defs>
     <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#a1a1a1"/></marker>
@@ -574,46 +492,6 @@ figcaption.ok { color: var(--ok); }
   <g class="ok-only"><rect x="376" y="488" width="208" height="24" rx="12" fill="#000" stroke="rgba(69,222,197,.4)"/><text x="480" y="504" text-anchor="middle" style="fill:var(--ok);font-size:11.5px" class="ko">10.0.1.7에서 10.0.4.3 정상</text></g>
   <g class="err-only"><rect x="356" y="488" width="248" height="24" rx="12" fill="#000" stroke="var(--err)"/><text x="480" y="504" text-anchor="middle" style="fill:var(--err);font-size:11.5px" class="ko">10.0.1.7에서 10.0.4.3 도달 불가</text></g>
 </svg>
-<svg class="arch m" data-v="123" viewBox="0 0 360 590" role="img" aria-label="Calico BGP 토폴로지: 워커 노드는 master 라벨로 선택된 컨트롤 플레인 노드의 라우트 리플렉터와 피어링한다">
-  <defs><marker id="m-ah-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#a1a1a1"/></marker></defs>
-  <rect class="zone" x="4" y="10" width="352" height="178" rx="12"/><text class="t-sm ko" x="16" y="32">컨트롤 플레인</text>
-  <g transform="translate(12,44)"><rect class="node" width="104" height="132" rx="8"/>
-      <circle class="ok" cx="14" cy="18" r="3.5"/><text class="t-lg" x="24" y="23" style="font-size:13px">cp-1</text>
-      <rect class="chip sel-box" x="8" y="36" width="88" height="22" rx="5"/>
-      <text class="t-sm lbl-old" x="52" y="51" text-anchor="middle" style="fill:var(--fg-2)">master</text>
-      <text class="t-sm lbl-new" x="52" y="51" text-anchor="middle" style="fill:var(--warn)">control-plane</text>
-      <g class="rr"><rect x="8" y="70" width="88" height="48" rx="6" fill="rgba(69,222,197,.08)" stroke="rgba(69,222,197,.4)"/><text x="52" y="91" text-anchor="middle" class="ko" style="fill:var(--ok);font-size:11px">BGP 라우트</text><text x="52" y="107" text-anchor="middle" class="ko" style="fill:var(--ok);font-size:11px">리플렉터</text></g>
-      <g class="err-only"><rect x="8" y="70" width="88" height="48" rx="6" fill="none" stroke="var(--line-2)" stroke-dasharray="3 3"/><text x="52" y="98" text-anchor="middle" class="t-sm ko">선택 안 됨</text></g></g><g transform="translate(128,44)"><rect class="node" width="104" height="132" rx="8"/>
-      <circle class="ok" cx="14" cy="18" r="3.5"/><text class="t-lg" x="24" y="23" style="font-size:13px">cp-2</text>
-      <rect class="chip sel-box" x="8" y="36" width="88" height="22" rx="5"/>
-      <text class="t-sm lbl-old" x="52" y="51" text-anchor="middle" style="fill:var(--fg-2)">master</text>
-      <text class="t-sm lbl-new" x="52" y="51" text-anchor="middle" style="fill:var(--warn)">control-plane</text>
-      <g class="rr"><rect x="8" y="70" width="88" height="48" rx="6" fill="rgba(69,222,197,.08)" stroke="rgba(69,222,197,.4)"/><text x="52" y="91" text-anchor="middle" class="ko" style="fill:var(--ok);font-size:11px">BGP 라우트</text><text x="52" y="107" text-anchor="middle" class="ko" style="fill:var(--ok);font-size:11px">리플렉터</text></g>
-      <g class="err-only"><rect x="8" y="70" width="88" height="48" rx="6" fill="none" stroke="var(--line-2)" stroke-dasharray="3 3"/><text x="52" y="98" text-anchor="middle" class="t-sm ko">선택 안 됨</text></g></g><g transform="translate(244,44)"><rect class="node" width="104" height="132" rx="8"/>
-      <circle class="ok" cx="14" cy="18" r="3.5"/><text class="t-lg" x="24" y="23" style="font-size:13px">cp-3</text>
-      <rect class="chip sel-box" x="8" y="36" width="88" height="22" rx="5"/>
-      <text class="t-sm lbl-old" x="52" y="51" text-anchor="middle" style="fill:var(--fg-2)">master</text>
-      <text class="t-sm lbl-new" x="52" y="51" text-anchor="middle" style="fill:var(--warn)">control-plane</text>
-      <g class="rr"><rect x="8" y="70" width="88" height="48" rx="6" fill="rgba(69,222,197,.08)" stroke="rgba(69,222,197,.4)"/><text x="52" y="91" text-anchor="middle" class="ko" style="fill:var(--ok);font-size:11px">BGP 라우트</text><text x="52" y="107" text-anchor="middle" class="ko" style="fill:var(--ok);font-size:11px">리플렉터</text></g>
-      <g class="err-only"><rect x="8" y="70" width="88" height="48" rx="6" fill="none" stroke="var(--line-2)" stroke-dasharray="3 3"/><text x="52" y="98" text-anchor="middle" class="t-sm ko">선택 안 됨</text></g></g><path class="bgp" d="M64 176 L60 262"/><path class="bgp" d="M64 176 L140 262"/><path class="bgp" d="M64 176 L220 262"/><path class="bgp" d="M64 176 L300 262"/><path class="bgp" d="M180 176 L60 262"/><path class="bgp" d="M180 176 L140 262"/><path class="bgp" d="M180 176 L220 262"/><path class="bgp" d="M180 176 L300 262"/><path class="bgp" d="M296 176 L60 262"/><path class="bgp" d="M296 176 L140 262"/><path class="bgp" d="M296 176 L220 262"/><path class="bgp" d="M296 176 L300 262"/>
-  <g class="x-mark"><rect x="100" y="206" width="160" height="26" rx="13" fill="#000" stroke="var(--err)"/><text x="180" y="223" text-anchor="middle" class="ko" style="fill:var(--err);font-size:11.5px">피어 0, 라우트 없음</text></g>
-  <g class="ok-only"><rect x="110" y="206" width="140" height="26" rx="13" fill="#000" stroke="var(--line-2)"/><text x="180" y="223" text-anchor="middle" class="t-md ko">라우트 반사 중</text></g>
-  <rect class="zone" x="4" y="252" width="352" height="272" rx="12"/><text class="t-sm ko" x="16" y="272">데이터 플레인</text>
-  <g transform="translate(12,282)"><rect class="node" width="162" height="108" rx="8"/>
-      <circle class="ok" cx="14" cy="18" r="3.5"/><text class="t-lg" x="24" y="23" style="font-size:13px">worker-a</text>
-      <text class="t-sm" x="14" y="42">10.0.1.0/24</text><circle class="pod" cx="22" cy="62" r="7"/><circle class="pod" cx="44" cy="62" r="7"/><circle class="pod" cx="66" cy="62" r="7"/>
-      <text class="t-md ok-only ko" x="14" y="94">라우트: 3 / 3</text><text class="t-md err-only ko" x="14" y="94" style="fill:var(--err)">라우트: 0 / 3</text></g><g transform="translate(186,282)"><rect class="node" width="162" height="108" rx="8"/>
-      <circle class="ok" cx="14" cy="18" r="3.5"/><text class="t-lg" x="24" y="23" style="font-size:13px">worker-b</text>
-      <text class="t-sm" x="14" y="42">10.0.2.0/24</text><circle class="pod" cx="22" cy="62" r="7"/><circle class="pod" cx="44" cy="62" r="7"/>
-      <text class="t-md ok-only ko" x="14" y="94">라우트: 3 / 3</text><text class="t-md err-only ko" x="14" y="94" style="fill:var(--err)">라우트: 0 / 3</text></g><g transform="translate(12,404)"><rect class="node" width="162" height="108" rx="8"/>
-      <circle class="ok" cx="14" cy="18" r="3.5"/><text class="t-lg" x="24" y="23" style="font-size:13px">worker-c</text>
-      <text class="t-sm" x="14" y="42">10.0.3.0/24</text><circle class="pod" cx="22" cy="62" r="7"/><circle class="pod" cx="44" cy="62" r="7"/><circle class="pod" cx="66" cy="62" r="7"/><circle class="pod" cx="88" cy="62" r="7"/>
-      <text class="t-md ok-only ko" x="14" y="94">라우트: 3 / 3</text><text class="t-md err-only ko" x="14" y="94" style="fill:var(--err)">라우트: 0 / 3</text></g><g transform="translate(186,404)"><rect class="node" width="162" height="108" rx="8"/>
-      <circle class="ok" cx="14" cy="18" r="3.5"/><text class="t-lg" x="24" y="23" style="font-size:13px">worker-d</text>
-      <text class="t-sm" x="14" y="42">10.0.4.0/24</text><circle class="pod" cx="22" cy="62" r="7"/><circle class="pod" cx="44" cy="62" r="7"/>
-      <text class="t-md ok-only ko" x="14" y="94">라우트: 3 / 3</text><text class="t-md err-only ko" x="14" y="94" style="fill:var(--err)">라우트: 0 / 3</text></g>
-  <g class="ok-only"><rect x="70" y="546" width="220" height="26" rx="13" fill="#000" stroke="rgba(69,222,197,.4)"/><text x="180" y="563" text-anchor="middle" class="ko" style="fill:var(--ok);font-size:11.5px">10.0.1.7에서 10.0.4.3 정상</text></g>
-  <g class="err-only"><rect x="60" y="546" width="240" height="26" rx="13" fill="#000" stroke="var(--err)"/><text x="180" y="563" text-anchor="middle" class="ko" style="fill:var(--err);font-size:11.5px">10.0.1.7에서 10.0.4.3 도달 불가</text></g></svg>
 </div></figure><div class="prose"><p>문제는 <a target="_blank" rel="noopener" href="https://github.com/projectcalico/calico">Calico</a>가 리플렉터를 <strong>어떻게 찾느냐</strong>였다. 수년 전 손으로 적용된 <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/reference/resources/bgppeer">BGPPeer</a> 설정은 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/labels-annotations-taints/"><code>node-role.kubernetes.io/master</code></a> 라벨이 붙은 노드를 리플렉터로 골랐다.</p></div><figure class="card"><pre><span class="c"># 업그레이드 후 노드 오브젝트</span>
 <span class="del">- node-role.kubernetes.io/master: ""</span><span class="add">+ node-role.kubernetes.io/control-plane: ""</span>
 <span class="c"># Calico BGP 피어링, 수년 전 수작업 적용</span>
@@ -623,7 +501,7 @@ figcaption.ok { color: var(--ok); }
 
 <span class="c"># 업그레이드된 클러스터에서 평가</span>
 matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24로 올라간 컨트롤 플레인 노드에는 이 라벨이 더 이상 없다. 셀렉터는 0대를 매칭했고, 리플렉터와의 세션은 전부 끊겼다.</p></div><figure class="card"><figcaption class="bad">1.24, 장애</figcaption><div class="scroll">
-<svg class="d arch" data-v="124" viewBox="0 0 960 560" role="img">
+<svg class="arch" data-v="124" viewBox="0 0 960 560" role="img">
   <title>Calico BGP 토폴로지: 워커 노드는 node-role.kubernetes.io/master 라벨로 선택된 컨트롤 플레인 노드의 라우트 리플렉터와 피어링한다</title>
   <defs>
     <marker id="ah-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#a1a1a1"/></marker>
@@ -722,46 +600,6 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
   <g class="ok-only"><rect x="376" y="488" width="208" height="24" rx="12" fill="#000" stroke="rgba(69,222,197,.4)"/><text x="480" y="504" text-anchor="middle" style="fill:var(--ok);font-size:11.5px" class="ko">10.0.1.7에서 10.0.4.3 정상</text></g>
   <g class="err-only"><rect x="356" y="488" width="248" height="24" rx="12" fill="#000" stroke="var(--err)"/><text x="480" y="504" text-anchor="middle" style="fill:var(--err);font-size:11.5px" class="ko">10.0.1.7에서 10.0.4.3 도달 불가</text></g>
 </svg>
-<svg class="arch m" data-v="124" viewBox="0 0 360 590" role="img" aria-label="Calico BGP 토폴로지: 워커 노드는 master 라벨로 선택된 컨트롤 플레인 노드의 라우트 리플렉터와 피어링한다">
-  <defs><marker id="m-ah-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#a1a1a1"/></marker></defs>
-  <rect class="zone" x="4" y="10" width="352" height="178" rx="12"/><text class="t-sm ko" x="16" y="32">컨트롤 플레인</text>
-  <g transform="translate(12,44)"><rect class="node" width="104" height="132" rx="8"/>
-      <circle class="ok" cx="14" cy="18" r="3.5"/><text class="t-lg" x="24" y="23" style="font-size:13px">cp-1</text>
-      <rect class="chip sel-box" x="8" y="36" width="88" height="22" rx="5"/>
-      <text class="t-sm lbl-old" x="52" y="51" text-anchor="middle" style="fill:var(--fg-2)">master</text>
-      <text class="t-sm lbl-new" x="52" y="51" text-anchor="middle" style="fill:var(--warn)">control-plane</text>
-      <g class="rr"><rect x="8" y="70" width="88" height="48" rx="6" fill="rgba(69,222,197,.08)" stroke="rgba(69,222,197,.4)"/><text x="52" y="91" text-anchor="middle" class="ko" style="fill:var(--ok);font-size:11px">BGP 라우트</text><text x="52" y="107" text-anchor="middle" class="ko" style="fill:var(--ok);font-size:11px">리플렉터</text></g>
-      <g class="err-only"><rect x="8" y="70" width="88" height="48" rx="6" fill="none" stroke="var(--line-2)" stroke-dasharray="3 3"/><text x="52" y="98" text-anchor="middle" class="t-sm ko">선택 안 됨</text></g></g><g transform="translate(128,44)"><rect class="node" width="104" height="132" rx="8"/>
-      <circle class="ok" cx="14" cy="18" r="3.5"/><text class="t-lg" x="24" y="23" style="font-size:13px">cp-2</text>
-      <rect class="chip sel-box" x="8" y="36" width="88" height="22" rx="5"/>
-      <text class="t-sm lbl-old" x="52" y="51" text-anchor="middle" style="fill:var(--fg-2)">master</text>
-      <text class="t-sm lbl-new" x="52" y="51" text-anchor="middle" style="fill:var(--warn)">control-plane</text>
-      <g class="rr"><rect x="8" y="70" width="88" height="48" rx="6" fill="rgba(69,222,197,.08)" stroke="rgba(69,222,197,.4)"/><text x="52" y="91" text-anchor="middle" class="ko" style="fill:var(--ok);font-size:11px">BGP 라우트</text><text x="52" y="107" text-anchor="middle" class="ko" style="fill:var(--ok);font-size:11px">리플렉터</text></g>
-      <g class="err-only"><rect x="8" y="70" width="88" height="48" rx="6" fill="none" stroke="var(--line-2)" stroke-dasharray="3 3"/><text x="52" y="98" text-anchor="middle" class="t-sm ko">선택 안 됨</text></g></g><g transform="translate(244,44)"><rect class="node" width="104" height="132" rx="8"/>
-      <circle class="ok" cx="14" cy="18" r="3.5"/><text class="t-lg" x="24" y="23" style="font-size:13px">cp-3</text>
-      <rect class="chip sel-box" x="8" y="36" width="88" height="22" rx="5"/>
-      <text class="t-sm lbl-old" x="52" y="51" text-anchor="middle" style="fill:var(--fg-2)">master</text>
-      <text class="t-sm lbl-new" x="52" y="51" text-anchor="middle" style="fill:var(--warn)">control-plane</text>
-      <g class="rr"><rect x="8" y="70" width="88" height="48" rx="6" fill="rgba(69,222,197,.08)" stroke="rgba(69,222,197,.4)"/><text x="52" y="91" text-anchor="middle" class="ko" style="fill:var(--ok);font-size:11px">BGP 라우트</text><text x="52" y="107" text-anchor="middle" class="ko" style="fill:var(--ok);font-size:11px">리플렉터</text></g>
-      <g class="err-only"><rect x="8" y="70" width="88" height="48" rx="6" fill="none" stroke="var(--line-2)" stroke-dasharray="3 3"/><text x="52" y="98" text-anchor="middle" class="t-sm ko">선택 안 됨</text></g></g><path class="bgp" d="M64 176 L60 262"/><path class="bgp" d="M64 176 L140 262"/><path class="bgp" d="M64 176 L220 262"/><path class="bgp" d="M64 176 L300 262"/><path class="bgp" d="M180 176 L60 262"/><path class="bgp" d="M180 176 L140 262"/><path class="bgp" d="M180 176 L220 262"/><path class="bgp" d="M180 176 L300 262"/><path class="bgp" d="M296 176 L60 262"/><path class="bgp" d="M296 176 L140 262"/><path class="bgp" d="M296 176 L220 262"/><path class="bgp" d="M296 176 L300 262"/>
-  <g class="x-mark"><rect x="100" y="206" width="160" height="26" rx="13" fill="#000" stroke="var(--err)"/><text x="180" y="223" text-anchor="middle" class="ko" style="fill:var(--err);font-size:11.5px">피어 0, 라우트 없음</text></g>
-  <g class="ok-only"><rect x="110" y="206" width="140" height="26" rx="13" fill="#000" stroke="var(--line-2)"/><text x="180" y="223" text-anchor="middle" class="t-md ko">라우트 반사 중</text></g>
-  <rect class="zone" x="4" y="252" width="352" height="272" rx="12"/><text class="t-sm ko" x="16" y="272">데이터 플레인</text>
-  <g transform="translate(12,282)"><rect class="node" width="162" height="108" rx="8"/>
-      <circle class="ok" cx="14" cy="18" r="3.5"/><text class="t-lg" x="24" y="23" style="font-size:13px">worker-a</text>
-      <text class="t-sm" x="14" y="42">10.0.1.0/24</text><circle class="pod" cx="22" cy="62" r="7"/><circle class="pod" cx="44" cy="62" r="7"/><circle class="pod" cx="66" cy="62" r="7"/>
-      <text class="t-md ok-only ko" x="14" y="94">라우트: 3 / 3</text><text class="t-md err-only ko" x="14" y="94" style="fill:var(--err)">라우트: 0 / 3</text></g><g transform="translate(186,282)"><rect class="node" width="162" height="108" rx="8"/>
-      <circle class="ok" cx="14" cy="18" r="3.5"/><text class="t-lg" x="24" y="23" style="font-size:13px">worker-b</text>
-      <text class="t-sm" x="14" y="42">10.0.2.0/24</text><circle class="pod" cx="22" cy="62" r="7"/><circle class="pod" cx="44" cy="62" r="7"/>
-      <text class="t-md ok-only ko" x="14" y="94">라우트: 3 / 3</text><text class="t-md err-only ko" x="14" y="94" style="fill:var(--err)">라우트: 0 / 3</text></g><g transform="translate(12,404)"><rect class="node" width="162" height="108" rx="8"/>
-      <circle class="ok" cx="14" cy="18" r="3.5"/><text class="t-lg" x="24" y="23" style="font-size:13px">worker-c</text>
-      <text class="t-sm" x="14" y="42">10.0.3.0/24</text><circle class="pod" cx="22" cy="62" r="7"/><circle class="pod" cx="44" cy="62" r="7"/><circle class="pod" cx="66" cy="62" r="7"/><circle class="pod" cx="88" cy="62" r="7"/>
-      <text class="t-md ok-only ko" x="14" y="94">라우트: 3 / 3</text><text class="t-md err-only ko" x="14" y="94" style="fill:var(--err)">라우트: 0 / 3</text></g><g transform="translate(186,404)"><rect class="node" width="162" height="108" rx="8"/>
-      <circle class="ok" cx="14" cy="18" r="3.5"/><text class="t-lg" x="24" y="23" style="font-size:13px">worker-d</text>
-      <text class="t-sm" x="14" y="42">10.0.4.0/24</text><circle class="pod" cx="22" cy="62" r="7"/><circle class="pod" cx="44" cy="62" r="7"/>
-      <text class="t-md ok-only ko" x="14" y="94">라우트: 3 / 3</text><text class="t-md err-only ko" x="14" y="94" style="fill:var(--err)">라우트: 0 / 3</text></g>
-  <g class="ok-only"><rect x="70" y="546" width="220" height="26" rx="13" fill="#000" stroke="rgba(69,222,197,.4)"/><text x="180" y="563" text-anchor="middle" class="ko" style="fill:var(--ok);font-size:11.5px">10.0.1.7에서 10.0.4.3 정상</text></g>
-  <g class="err-only"><rect x="60" y="546" width="240" height="26" rx="13" fill="#000" stroke="var(--err)"/><text x="180" y="563" text-anchor="middle" class="ko" style="fill:var(--err);font-size:11.5px">10.0.1.7에서 10.0.4.3 도달 불가</text></g></svg>
 </div></figure><div class="prose"><p>노드는 여전히 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/architecture/nodes/">Ready</a>였고 파드도 그대로 떠 있었다. 하지만 노드 사이에 라우트가 하나도 남지 않아, <strong>다른 노드의 파드로 가는 모든 트래픽이 갈 곳을 잃었다.</strong></p></div>
   </div>
 </section>
@@ -815,7 +653,7 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
 <span class="del">;; connection timed out; no servers could be reached</span></pre></figure>
     <div class="prose"><p>이 비대칭이 결정적 단서였다. 노드도, 업링크도, 인터넷 연결도 살아 있었다. 끊긴 것은 <strong>클러스터 안에서 노드와 노드 사이를 잇는 파드 경로</strong>뿐이었다. 다른 노드에 있는 CoreDNS에 닿지 못하니 이름 해석까지 같이 실패했다.</p></div>
     <figure class="card"><figcaption>클러스터 내부 구간</figcaption><div class="scroll">
-<svg class="d" viewBox="0 0 960 400" role="img" aria-label="클러스터 내부 구간: 같은 노드 파드는 로컬 cali 인터페이스로 성공, 다른 노드 파드는 BGP 라우트가 없어 실패">
+<svg viewBox="0 0 960 400" role="img" aria-label="클러스터 내부 구간: 같은 노드 파드는 로컬 cali 인터페이스로 성공, 다른 노드 파드는 BGP 라우트가 없어 실패">
   <defs><marker id="ai" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#45dec5"/></marker></defs>
   <rect x="20" y="30" width="920" height="350" rx="14" fill="none" stroke="#555" stroke-dasharray="6 5"/><rect x="44" y="19" width="76" height="22" rx="11" fill="#000" stroke="#555"/><text x="82.0" y="34" text-anchor="middle" class="ko" style="fill:#a1a1a1;font-size:11.5px">클러스터</text>
   <rect x="48" y="76" width="430" height="280" rx="10" fill="#050505" stroke="#444"/><rect x="68" y="65" width="50" height="22" rx="11" fill="#000" stroke="#555"/><text x="93.0" y="80" text-anchor="middle" class="ko" style="fill:#a1a1a1;font-size:11.5px">노드</text>
@@ -835,29 +673,10 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
   <path d="M553 202l14 14M567 202l-14 14" stroke="var(--err)" stroke-width="2"/>
   <rect x="490" y="232" width="140" height="24" rx="12" fill="#000" stroke="var(--err)"/><text x="560" y="248" text-anchor="middle" class="ko" style="fill:var(--err);font-size:11.5px">BGP 라우트 없음</text>
   <text x="560" y="290" text-anchor="middle" class="t-sm ko">노드 경계를 넘는 구간</text>
-</svg>
-<svg class="m" viewBox="0 0 360 540" role="img" aria-label="클러스터 내부 구간: 같은 노드 파드는 로컬 cali 인터페이스로 성공, 다른 노드 파드는 BGP 라우트가 없어 실패">
-  <defs><marker id="aim" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#45dec5"/></marker></defs>
-  <rect x="4" y="20" width="352" height="510" rx="14" fill="none" stroke="#555" stroke-dasharray="6 5"/><rect x="20" y="9" width="76" height="22" rx="11" fill="#000" stroke="#555"/><text x="58.0" y="24" text-anchor="middle" class="ko" style="fill:#a1a1a1;font-size:11.5px">클러스터</text>
-  <rect x="16" y="62" width="328" height="250" rx="10" fill="#050505" stroke="#444"/><rect x="30" y="51" width="50" height="22" rx="11" fill="#000" stroke="#555"/><text x="55.0" y="66" text-anchor="middle" class="ko" style="fill:#a1a1a1;font-size:11.5px">노드</text>
-  <text class="t-lg" x="30" y="98">worker-a</text><text class="t-sm" x="330" y="98" text-anchor="end">10.0.100.11</text>
-  <circle cx="60" cy="150" r="16" class="box-ok"/><text class="t-md ko" x="60" y="184" text-anchor="middle">debug 파드</text><text class="t-sm" x="60" y="200" text-anchor="middle">10.0.1.7</text><circle cx="296" cy="150" r="16" class="box-ok"/><text class="t-md ko" x="296" y="184" text-anchor="middle">파드</text><text class="t-sm" x="296" y="200" text-anchor="middle">10.0.1.9</text>
-  <path d="M77 150H278" stroke="var(--ok)" stroke-width="1.5" fill="none" marker-end="url(#aim)"/>
-  <path d="M170 140l6 7 11-14" stroke="var(--ok)" stroke-width="2" fill="none"/><text x="178" y="130" text-anchor="middle" class="ko" style="fill:var(--ok);font-size:11px">로컬 cali 인터페이스</text>
-  <text class="t-sm" x="100" y="238">$ ip route</text>
-  <text class="t-md" x="100" y="260" style="fill:var(--ok)">10.0.1.9 dev cali1a2b</text>
-  <text class="t-md" x="100" y="284" style="fill:var(--err)">10.0.4.0/24  (없음)</text>
-  <rect x="16" y="376" width="328" height="138" rx="10" fill="#050505" stroke="#444"/><rect x="96" y="365" width="50" height="22" rx="11" fill="#000" stroke="#555"/><text x="121.0" y="380" text-anchor="middle" class="ko" style="fill:#a1a1a1;font-size:11.5px">노드</text>
-  <text class="t-lg" x="30" y="412">worker-d</text><text class="t-sm" x="330" y="412" text-anchor="end">10.0.100.14</text>
-  <circle cx="296" cy="446" r="16" class="box-err"/><text class="t-md ko" x="296" y="480" text-anchor="middle">파드</text><text class="t-sm" x="296" y="496" text-anchor="middle">10.0.4.3</text>
-  <path d="M60 216V246" stroke="var(--err)" stroke-width="1.5" stroke-dasharray="5 5" fill="none"/>
-  <path d="M60 300V446H278" stroke="var(--err)" stroke-width="1.5" stroke-dasharray="5 5" fill="none"/>
-  <line x1="60" y1="246" x2="60" y2="300" stroke="var(--err)" stroke-width="1.5" stroke-dasharray="5 5"/>
-  <path d="M53 337l14 14M67 337l-14 14" stroke="var(--err)" stroke-width="2"/>
-  <rect x="80" y="332" width="128" height="24" rx="12" fill="#000" stroke="var(--err)"/><text x="144" y="348" text-anchor="middle" class="ko" style="fill:var(--err);font-size:11px">BGP 라우트 없음</text></svg></div></figure>
+</svg></div></figure>
     <div class="prose"><p>같은 노드의 파드는 Calico가 만든 로컬 <code>cali</code> 인터페이스로 바로 간다. 이 라우트는 노드가 스스로 만들기 때문에 BGP가 필요 없다.</p><p>다른 노드의 파드는 다르다. 노드 사이를 건너려면 BGP로 배운 <code>10.0.4.0/24</code> 같은 라우트가 있어야 하는데, 그 라우트가 통째로 사라졌다.</p></div>
     <figure class="card"><figcaption>클러스터 외부 구간</figcaption><div class="scroll">
-<svg class="d" viewBox="0 0 960 360" role="img" aria-label="클러스터 외부 구간: 노드 안에서 SNAT로 출발지가 노드 IP로 바뀌고 기본 라우트로 클러스터 밖 example.com에 도달한다">
+<svg viewBox="0 0 960 360" role="img" aria-label="클러스터 외부 구간: 노드 안에서 SNAT로 출발지가 노드 IP로 바뀌고 기본 라우트로 클러스터 밖 example.com에 도달한다">
   <defs><marker id="ae" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#45dec5"/></marker></defs>
   <rect x="20" y="30" width="680" height="280" rx="14" fill="none" stroke="#555" stroke-dasharray="6 5"/><rect x="44" y="19" width="76" height="22" rx="11" fill="#000" stroke="#555"/><text x="82.0" y="34" text-anchor="middle" class="ko" style="fill:#a1a1a1;font-size:11.5px">클러스터</text>
   <rect x="40" y="76" width="640" height="212" rx="10" fill="#050505" stroke="#444"/><rect x="60" y="65" width="50" height="22" rx="11" fill="#000" stroke="#555"/><text x="85.0" y="80" text-anchor="middle" class="ko" style="fill:#a1a1a1;font-size:11.5px">노드</text>
@@ -872,23 +691,7 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
   <path d="M896 158l6 7 11-14" stroke="var(--ok)" stroke-width="2" fill="none"/>
   <text x="830" y="250" text-anchor="middle" class="t-sm ko">인터넷</text>
   <text x="480" y="340" text-anchor="middle" class="ko" style="fill:var(--fg-2);font-size:12.5px">응답은 노드 IP로 돌아오고, 노드가 다시 파드로 넘긴다. BGP 라우트는 한 번도 쓰지 않는다.</text>
-</svg>
-<svg class="m" viewBox="0 0 360 640" role="img" aria-label="클러스터 외부 구간: 노드 안에서 SNAT로 출발지가 노드 IP로 바뀌고 기본 라우트로 클러스터 밖 example.com에 도달한다">
-  <defs><marker id="aem" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#45dec5"/></marker></defs>
-  <rect x="4" y="20" width="352" height="428" rx="14" fill="none" stroke="#555" stroke-dasharray="6 5"/><rect x="20" y="9" width="76" height="22" rx="11" fill="#000" stroke="#555"/><text x="58.0" y="24" text-anchor="middle" class="ko" style="fill:#a1a1a1;font-size:11.5px">클러스터</text>
-  <rect x="16" y="62" width="328" height="370" rx="10" fill="#050505" stroke="#444"/><rect x="30" y="51" width="50" height="22" rx="11" fill="#000" stroke="#555"/><text x="55.0" y="66" text-anchor="middle" class="ko" style="fill:#a1a1a1;font-size:11.5px">노드</text>
-  <text class="t-lg" x="30" y="98">worker-a</text><text class="t-sm" x="330" y="98" text-anchor="end">10.0.100.11</text>
-  <rect class="box-ok" x="40" y="118" width="280" height="62" rx="10"/><text class="t-lg ko" x="58" y="145">debug 파드</text><text class="t-sm ko" x="58" y="165">src 10.0.1.7</text>
-  <path d="M180 180V222" stroke="var(--ok)" stroke-width="1.5" marker-end="url(#aem)"/>
-  <rect class="box" x="40" y="224" width="280" height="62" rx="10"/><text class="t-lg ko" x="58" y="251">SNAT</text><text class="t-sm ko" x="58" y="271">src 10.0.100.11 (노드 IP)</text>
-  <path d="M180 286V328" stroke="var(--ok)" stroke-width="1.5" marker-end="url(#aem)"/>
-  <rect class="box" x="40" y="330" width="280" height="62" rx="10"/><text class="t-lg ko" x="58" y="357">기본 라우트</text><text class="t-sm ko" x="58" y="377">via 10.0.100.1</text>
-  <path d="M180 392V500" stroke="var(--ok)" stroke-width="1.5" marker-end="url(#aem)"/>
-  <rect x="4" y="470" width="352" height="120" rx="14" fill="none" stroke="#555" stroke-dasharray="6 5"/><rect x="20" y="459" width="96" height="22" rx="11" fill="#000" stroke="#555"/><text x="68.0" y="474" text-anchor="middle" class="ko" style="fill:#a1a1a1;font-size:11.5px">클러스터 밖</text>
-  <rect class="box-ok" x="40" y="502" width="280" height="62" rx="10"/><text class="t-lg" x="58" y="529">example.com</text><text class="t-sm" x="58" y="549">HTTP 200</text>
-  <path d="M290 522l6 7 11-14" stroke="var(--ok)" stroke-width="2" fill="none"/>
-  <text x="180" y="614" text-anchor="middle" class="ko" style="fill:var(--fg-2);font-size:12px">응답은 노드 IP로 돌아와 다시 파드로 간다.</text>
-  <text x="180" y="632" text-anchor="middle" class="ko" style="fill:var(--fg-2);font-size:12px">BGP 라우트는 한 번도 쓰지 않는다.</text></svg></div></figure>
+</svg></div></figure>
     <div class="prose"><p>외부로 나가는 요청은 <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/workloads-outside-cluster">Calico outgoing NAT</a>로 출발지가 노드 IP로 바뀐 뒤 기본 라우트를 탄다. 이 경로 역시 BGP를 쓰지 않는다.</p><p>그래서 장애는 <strong>노드 사이를 건너는 파드 트래픽에만</strong> 정확히 나타났다. 바깥에서 보면 네트워크는 멀쩡했고, 안에서는 파드끼리만 서로를 잃었다. 다음 섹션에서 그 라우팅 테이블을 직접 본다.</p></div>
   </div>
 </section>
@@ -897,13 +700,12 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
   <div class="wrap">
     <div class="sec-h"><h2>패킷이 사라지는 곳</h2><p>라우트가 없는 노드에서 실제로 일어나는 일.</p></div>
     <div class="prose"><p><a target="_blank" rel="noopener" href="https://github.com/projectcalico/calico">Calico</a>는 <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">BGP</a>로 배운 파드 CIDR을 노드 커널 라우팅 테이블에 <a target="_blank" rel="noopener" href="https://bird.network.cz/"><code>proto bird</code></a> 라우트로 기록한다. 패킷은 이 테이블을 보고 다음 홉을 정한다.</p></div><figure class="card"><div class="scroll">
-<svg class="d" viewBox="0 0 960 330" role="img" aria-label="worker-a의 파드 10.0.1.7에서 worker-d의 파드 10.0.4.3으로 가는 패킷 경로. 1.23은 BGP 라우트로 전달, 1.24는 라우트가 없어 드롭">
+<svg viewBox="0 0 960 330" role="img" aria-label="worker-a의 파드 10.0.1.7에서 worker-d의 파드 10.0.4.3으로 가는 패킷 경로. 1.23은 BGP 라우트로 전달, 1.24는 라우트가 없어 드롭">
   <defs><marker id="ap" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#45dec5"/></marker></defs>
   <text x="30" y="26" style="fill:var(--ok);font-size:12px">1.23</text><path class="ln" d="M74 90H130"/><circle cx="60" cy="90" r="14" class="box"/><text class="t-sm" x="60" y="122" text-anchor="middle">10.0.1.7</text><rect class="box" x="130" y="40" width="330" height="100" rx="8"/><text class="t-lg" x="146" y="64">worker-a</text><text class="t-sm" x="444" y="64" text-anchor="end">$ ip route</text><text class="t-md" x="146" y="86">10.0.2.0/24 via 10.0.100.12 proto bird</text><text class="t-md" x="146" y="104">10.0.3.0/24 via 10.0.100.13 proto bird</text><text x="146" y="122" style="fill:var(--ok);font-size:11.5px">10.0.4.0/24 via 10.0.100.14 proto bird</text><path d="M460 90H650" stroke="var(--ok)" stroke-width="1.5" fill="none" marker-end="url(#ap)"/><text x="555" y="82" text-anchor="middle" style="fill:var(--ok);font-size:11px" class="ko">다음 홉 10.0.100.14</text><path d="M820 90H876" stroke="var(--ok)" stroke-width="1.5" marker-end="url(#ap)"/><rect class="box" x="650" y="60" width="170" height="60" rx="8"/><text class="t-lg" x="666" y="86">worker-d</text><text class="t-sm" x="666" y="104">10.0.100.14</text><circle cx="890" cy="90" r="14" class="box-ok"/><text class="t-sm" x="890" y="122" text-anchor="middle">10.0.4.3</text>
   <line x1="30" y1="172" x2="930" y2="172" stroke="var(--line)"/>
   <text x="30" y="192" style="fill:var(--err);font-size:12px">1.24</text><path class="ln" d="M74 256H130"/><circle cx="60" cy="256" r="14" class="box"/><text class="t-sm" x="60" y="288" text-anchor="middle">10.0.1.7</text><rect class="box" x="130" y="206" width="330" height="100" rx="8"/><text class="t-lg" x="146" y="230">worker-a</text><text class="t-sm" x="444" y="230" text-anchor="end">$ ip route</text><text x="146" y="252" style="fill:var(--err);font-size:11.5px" class="ko">(bird 라우트 없음)</text><text class="ko t-sm" x="146" y="270">10.0.4.3은 기본 라우트에만 매칭</text><path d="M460 256H560" stroke="var(--err)" stroke-width="1.5" stroke-dasharray="5 5" fill="none"/><path d="M566 248l16 16M582 248l-16 16" stroke="var(--err)" stroke-width="2"/><text x="574" y="286" text-anchor="middle" style="fill:var(--err);font-size:11px" class="ko">드롭</text><rect class="box" x="650" y="226" width="170" height="60" rx="8"/><text class="t-lg" x="666" y="252">worker-d</text><text class="t-sm" x="666" y="270">10.0.100.14</text><circle cx="890" cy="256" r="14" class="box-err"/><text class="t-sm" x="890" y="288" text-anchor="middle">10.0.4.3</text>
 </svg>
-<svg class="m" viewBox="0 0 360 560" role="img" aria-label="worker-a의 파드 10.0.1.7에서 worker-d의 파드 10.0.4.3으로 가는 패킷 경로. 1.23은 전달, 1.24는 드롭"><defs><marker id="apm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#45dec5"/></marker></defs><text x="20" y="18" style="fill:var(--ok);font-size:12px">1.23</text><circle cx="34" cy="48" r="12" class="box"/><text class="t-sm" x="54" y="52">10.0.1.7</text><path class="ln" d="M34 60V76"/><rect class="box" x="20" y="76" width="320" height="92" rx="8"/><text class="t-lg" x="34" y="96">worker-a</text><text class="t-sm" x="326" y="96" text-anchor="end">$ ip route</text><text class="t-sm" x="34" y="114">10.0.2.0/24 via 10.0.100.12 proto bird</text><text class="t-sm" x="34" y="132">10.0.3.0/24 via 10.0.100.13 proto bird</text><text x="34" y="150" style="fill:var(--ok);font-size:10.5px">10.0.4.0/24 via 10.0.100.14 proto bird</text><path d="M180 168V208" stroke="var(--ok)" stroke-width="1.5" marker-end="url(#apm)"/><text x="190" y="194" style="fill:var(--ok);font-size:10.5px">next hop 10.0.100.14</text><rect class="box" x="20" y="210" width="320" height="52" rx="8"/><text class="t-lg" x="34" y="241">worker-d</text><circle cx="310" cy="236" r="12" class="box-ok"/><text class="t-sm" x="292" y="240" text-anchor="end">10.0.4.3</text><text x="20" y="302" style="fill:var(--err);font-size:12px">1.24</text><circle cx="34" cy="332" r="12" class="box"/><text class="t-sm" x="54" y="336">10.0.1.7</text><path class="ln" d="M34 344V360"/><rect class="box" x="20" y="360" width="320" height="92" rx="8"/><text class="t-lg" x="34" y="380">worker-a</text><text class="t-sm" x="326" y="380" text-anchor="end">$ ip route</text><text x="34" y="398" class="ko" style="fill:var(--err);font-size:11px">(bird 라우트 없음)</text><text class="t-sm ko" x="34" y="418">10.0.4.3은 기본 라우트에만 매칭</text><path d="M180 452V474" stroke="var(--err)" stroke-width="1.5" stroke-dasharray="4 4"/><path d="M173 477l14 14M187 477l-14 14" stroke="var(--err)" stroke-width="2"/><text x="196" y="488" class="ko" style="fill:var(--err);font-size:11px">드롭</text><rect class="box" x="20" y="494" width="320" height="52" rx="8" opacity=".5"/><text class="t-lg" x="34" y="525">worker-d</text><circle cx="310" cy="520" r="12" class="box-err"/><text class="t-sm" x="292" y="524" text-anchor="end">10.0.4.3</text></svg>
 </div></figure><div class="prose"><p>1.24에서는 bird 라우트가 하나도 없다. 10.0.4.3으로 가는 패킷은 기본 라우트로 빠지고, 그 너머의 네트워크는 파드 IP를 모르기 때문에 버린다. 파드 간 통신, <a target="_blank" rel="noopener" href="https://github.com/coredns/coredns">CoreDNS</a>, <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/services-networking/service/">Service</a>가 모두 이 경로를 쓴다.</p></div>
   </div>
 </section>
@@ -926,7 +728,7 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
 <section>
   <div class="wrap">
     <div class="sec-h"><h2>복구</h2><p>원인을 모르는 채로 되돌릴 길을 찾아야 했다.</p></div>
-    <div class="prose"><p>당장 원인을 몰랐기 때문에 고쳐서 앞으로 나아가는 롤 포워드는 불가능했다. 남은 선택은 1.23으로 돌아가는 것뿐이었고, 그 결정을 내리는 데만 몇 시간이 걸렸다.</p></div><figure class="card decision"><svg class="d" viewBox="0 0 520 380" role="img" aria-label="의사결정 트리: 원인을 몰라 롤 포워드 불가, 다운그레이드 미지원, 그래서 etcd 백업 복원을 선택">
+    <div class="prose"><p>당장 원인을 몰랐기 때문에 고쳐서 앞으로 나아가는 롤 포워드는 불가능했다. 남은 선택은 1.23으로 돌아가는 것뿐이었고, 그 결정을 내리는 데만 몇 시간이 걸렸다.</p></div><figure class="card decision"><svg viewBox="0 0 520 380" role="img" aria-label="의사결정 트리: 원인을 몰라 롤 포워드 불가, 다운그레이드 미지원, 그래서 etcd 백업 복원을 선택">
           <defs><marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#666"/></marker></defs>
           <g fill="none" stroke="#333" stroke-width="1" marker-end="url(#ah2)">
             <path d="M260 78 V104 H100 V128"/><path d="M260 78 V104 H260 V128"/><path d="M260 78 V104 H420 V128"/>
@@ -961,20 +763,7 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
             <text x="16" y="68" class="ko t-md">새 형식으로 옮긴다.</text>
             <text x="16" y="86" class="ko t-md">되돌리는 경로가 없다.</text>
           </g>
-        </svg>
-<svg class="m" viewBox="0 0 360 500" role="img" aria-label="의사결정 트리: 원인을 몰라 롤 포워드 불가, 다운그레이드 미지원, 그래서 etcd 백업 복원을 선택">
-  <defs><marker id="adm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#666"/></marker></defs>
-  <rect x="80" y="8" width="200" height="50" rx="8" fill="#000" stroke="#333"/><text x="180" y="30" text-anchor="middle" class="t-lg ko">사이트 중단</text><text x="180" y="48" text-anchor="middle" class="t-sm ko">원인 모름</text>
-  <path class="ln" d="M180 58V82" marker-end="url(#adm)"/>
-  <rect x="20" y="86" width="320" height="50" rx="8" class="box" stroke-dasharray="3 3"/><text x="36" y="116" class="t-md ko" style="font-size:13px;fill:var(--fg)">롤 포워드</text><text x="324" y="116" text-anchor="end" class="ko" style="fill:var(--err);font-size:11.5px">불가: 원인 모름</text>
-  <rect x="20" y="146" width="320" height="50" rx="8" class="box" stroke-dasharray="3 3"/><text x="36" y="176" class="t-md ko" style="font-size:13px;fill:var(--fg)">다운그레이드</text><text x="324" y="176" text-anchor="end" class="ko" style="fill:var(--err);font-size:11.5px">미지원</text>
-  <rect x="20" y="206" width="320" height="50" rx="8" class="box"/><text x="36" y="236" class="t-md ko" style="font-size:13px;fill:var(--fg)">백업 복원</text><text x="324" y="236" text-anchor="end" class="ko" style="fill:var(--warn);font-size:11.5px">고위험, 선택</text>
-  <rect x="20" y="206" width="320" height="50" rx="8" fill="rgba(245,165,36,.06)" stroke="rgba(245,165,36,.5)"/>
-  <path class="ln" d="M180 256V282" marker-end="url(#adm)"/>
-  <rect x="20" y="286" width="320" height="92" rx="8" fill="#000" stroke="#333"/>
-  <text x="36" y="310" class="t-sm ko">위험 요소</text><text x="36" y="334" class="t-md ko">이 규모에서 복원을 해본 적 없음</text><text x="36" y="358" class="t-md ko">TLS, 설정 드리프트</text>
-  <rect x="20" y="394" width="320" height="96" rx="8" fill="none" stroke="#1f1f1f"/>
-  <text x="36" y="418" class="t-sm ko">다운그레이드 불가 이유</text><text x="36" y="442" class="t-md ko">업그레이드는 저장 오브젝트를 새 형식으로</text><text x="36" y="464" class="t-md ko">옮긴다. 되돌리는 경로가 없다.</text></svg></figure><div class="prose"><p><a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes">Kubernetes</a>는 <strong><a target="_blank" rel="noopener" href="https://kubernetes.io/releases/version-skew-policy/">다운그레이드를 지원하지 않는다</a>.</strong> 업그레이드된 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/">API 서버</a>는 etcd에 저장된 오브젝트를 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/tasks/manage-kubernetes-objects/storage-version-migration/">새 형식으로 다시</a> 쓸 수 있고, 구버전 API 서버는 이를 읽지 못할 수 있다. 지원되는 복귀 경로는 업그레이드 전에 찍은 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/">etcd 스냅샷</a>뿐이다.</p><p>이 규모에서 백업 복원을 실제로 해 본 적은 없었다. 복원 후에는 인증서와 컴포넌트 설정 불일치를 하나씩 바로잡아야 했다.</p></div><figure class="card"><div class="phases">
+        </svg></figure><div class="prose"><p><a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes">Kubernetes</a>는 <strong><a target="_blank" rel="noopener" href="https://kubernetes.io/releases/version-skew-policy/">다운그레이드를 지원하지 않는다</a>.</strong> 업그레이드된 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/">API 서버</a>는 etcd에 저장된 오브젝트를 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/tasks/manage-kubernetes-objects/storage-version-migration/">새 형식으로 다시</a> 쓸 수 있고, 구버전 API 서버는 이를 읽지 못할 수 있다. 지원되는 복귀 경로는 업그레이드 전에 찍은 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/">etcd 스냅샷</a>뿐이다.</p><p>이 규모에서 백업 복원을 실제로 해 본 적은 없었다. 복원 후에는 인증서와 컴포넌트 설정 불일치를 하나씩 바로잡아야 했다.</p></div><figure class="card"><div class="phases">
           <div class="ph bad"><div class="b">1</div><div><div class="t">업그레이드 시작, 사이트 장애</div><div class="d">파드 네트워크 분단</div></div></div>
           <div class="ph hot"><div class="b">2</div><div><div class="t">진단</div><div class="d">컨트롤 플레인 정상, 데이터 플레인 사망</div></div></div>
           <div class="ph hot"><div class="b">3</div><div><div class="t">롤백 결정</div><div class="d">수 시간, 원인 미확인</div></div></div>
@@ -983,7 +772,7 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
           <div class="ph good"><div class="b">6</div><div><div class="t">Reddit 복구</div><div class="d">트래픽 증가, 캐시 워밍</div></div></div>
           <div class="ph"><div class="b">7</div><div><div class="t">근본 원인 발견</div><div class="d">제거된 라벨에 걸린 RR 셀렉터</div></div></div>
         </div></figure><div class="prose"><p>복원은 클러스터 상태를 스냅샷 시점으로 <strong>되감는다.</strong> 스냅샷 이후 기록된 오브젝트는 사라지고, <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/architecture/controller/">컨트롤러</a>가 다시 수렴시켜야 한다.</p></div><figure class="card"><div class="scroll">
-<svg class="d" viewBox="0 0 960 190" role="img" aria-label="복원 타임라인: 상태가 업그레이드 전 etcd 스냅샷으로 되감기고, 스냅샷과 복원 사이의 쓰기는 유실된다">
+<svg viewBox="0 0 960 190" role="img" aria-label="복원 타임라인: 상태가 업그레이드 전 etcd 스냅샷으로 되감기고, 스냅샷과 복원 사이의 쓰기는 유실된다">
   <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#555" stroke-width="1.5"/></pattern></defs>
   <rect x="150" y="78" width="570" height="24" fill="url(#hatch)" opacity=".8"/>
   <rect x="340" y="78" width="380" height="24" fill="rgba(255,97,102,.18)"/>
@@ -998,17 +787,6 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
   <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#45dec5"/></marker></defs>
   <g class="t-sm" transform="translate(790,0)"><rect x="40" y="150" width="10" height="10" fill="url(#hatch)"/><text x="58" y="159" class="ko">유실된 쓰기</text><rect x="40" y="168" width="10" height="10" fill="rgba(255,97,102,.4)"/><text x="58" y="177" class="ko">장애</text></g>
 </svg>
-<svg class="m" viewBox="0 0 360 420" role="img" aria-label="복원 타임라인: 상태가 업그레이드 전 etcd 스냅샷으로 되감기고, 스냅샷과 복원 사이의 쓰기는 유실된다">
-  <defs><pattern id="hatchm" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#555" stroke-width="1.5"/></pattern><marker id="arm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#45dec5"/></marker></defs>
-  <line x1="90" y1="20" x2="90" y2="380" stroke="#333"/>
-  <rect x="80" y="50" width="20" height="240" fill="url(#hatchm)" opacity=".8"/>
-  <rect x="80" y="120" width="20" height="170" fill="rgba(255,97,102,.18)"/>
-  <circle cx="90" cy="50" r="6" fill="#000" stroke="#ededed"/><text x="116" y="48" class="t-md ko" style="fill:var(--fg);font-size:13px">etcd 스냅샷</text><text x="116" y="66" class="t-sm ko">업그레이드 직전</text>
-  <circle cx="90" cy="120" r="6" fill="#000" stroke="var(--warn)"/><text x="116" y="124" class="ko" style="fill:var(--warn);font-size:13px">업그레이드, 사이트 중단</text>
-  <circle cx="90" cy="290" r="6" fill="#000" stroke="var(--ok)"/><text x="116" y="288" class="ko" style="fill:var(--ok);font-size:13px">복원</text><text x="116" y="306" class="t-sm ko">상태가 스냅샷으로 되감김</text>
-  <circle cx="90" cy="350" r="6" fill="var(--ok)"/><text x="116" y="354" class="t-md ko" style="fill:var(--fg);font-size:13px">서비스 복구</text>
-  <path d="M78 290C30 240 30 100 78 54" fill="none" stroke="var(--ok)" stroke-dasharray="3 4" marker-end="url(#arm)"/>
-  <g class="t-sm ko"><rect x="200" y="196" width="10" height="10" fill="url(#hatchm)"/><text x="218" y="205">유실된 쓰기</text><rect x="200" y="216" width="10" height="10" fill="rgba(255,97,102,.4)"/><text x="218" y="225">장애</text></g></svg>
 </div></figure><div class="prose"><p>총 314분 뒤 Reddit은 돌아왔다. 근본 원인인 라벨과 셀렉터는 복구가 끝난 뒤 조사에서 밝혀졌다.</p></div>
   </div>
 </section>
@@ -1052,7 +830,7 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
     <div class="sec-h"><h2>결론</h2><p></p></div>
     <p class="verdict">314분 동안의 전면 장애.<br>그 발단은 고작 <span>컨트롤 플레인 노드에서 사라진 라벨 하나</span>였다.</p>
     <figure class="card"><figcaption>업그레이드 순간, cp 노드의 라벨</figcaption><div class="scroll">
-<svg class="d lblfx" viewBox="0 0 960 330" role="img" aria-label="애니메이션: 1.24 업그레이드와 함께 node-role.kubernetes.io/master 라벨이 사라지고, 셀렉터 매칭이 3에서 0으로, 라우트 리플렉터가 모두 꺼진다">
+<svg class="lblfx" viewBox="0 0 960 330" role="img" aria-label="애니메이션: 1.24 업그레이드와 함께 node-role.kubernetes.io/master 라벨이 사라지고, 셀렉터 매칭이 3에서 0으로, 라우트 리플렉터가 모두 꺼진다">
   <rect class="box" x="30" y="30" width="470" height="270" rx="12"/>
   <text x="54" y="64" class="t-sm">$ kubectl get node cp-1 -o yaml</text>
   <g class="fx-v123"><rect x="420" y="48" width="60" height="24" rx="6" fill="#000" stroke="var(--line-2)"/><text x="450" y="65" text-anchor="middle" class="t-md">1.23</text></g>
@@ -1085,36 +863,9 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
   </g>
   <text class="fx-ok ko" x="564" y="262" style="fill:var(--ok);font-size:13px">파드 라우트 반사 중</text>
   <text class="fx-bad ko" x="564" y="262" style="fill:var(--err);font-size:13px">피어 0, 파드 라우트 전부 소멸</text>
-</svg>
-<svg class="lblfx m" viewBox="0 0 360 560" role="img" aria-label="애니메이션: 1.24 업그레이드와 함께 master 라벨이 사라지고, 셀렉터 매칭이 3에서 0으로, 라우트 리플렉터가 모두 꺼진다">
-  <rect class="box" x="6" y="8" width="348" height="262" rx="12"/>
-  <text x="20" y="36" class="t-sm">$ kubectl get node cp-1 -o yaml</text>
-  <g class="fx-v123"><rect x="290" y="20" width="52" height="24" rx="6" fill="#000" stroke="var(--line-2)"/><text x="316" y="37" text-anchor="middle" class="t-md">1.23</text></g>
-  <g class="fx-v124"><rect x="290" y="20" width="52" height="24" rx="6" fill="#000" stroke="#555"/><text x="316" y="37" text-anchor="middle" style="fill:var(--fg);font-size:11.5px">1.24</text></g>
-  <g style="font-size:11px">
-    <text x="20" y="76" style="fill:var(--fg-2)">metadata:</text>
-    <text x="32" y="100" style="fill:var(--fg-2)">labels:</text>
-    <text x="44" y="126" style="fill:var(--fg-3)">kubernetes.io/hostname: cp-1</text>
-    <g class="fx-master"><rect class="fx-hl" x="36" y="138" width="306" height="26" rx="5"/>
-      <text x="44" y="156" class="fx-mtext">node-role.kubernetes.io/master: ""</text>
-      <line class="fx-strike" x1="42" y1="152" x2="276" y2="152"/></g>
-    <text x="44" y="190" style="fill:var(--fg-3)">node-role.kubernetes.io/control-plane: ""</text>
-  </g>
-  <text class="fx-gone ko" x="20" y="246" style="fill:var(--err);font-size:12px">1.24에서 master 라벨 제거</text>
-  <path class="fx-wire" d="M180 270V300"/>
-  <rect class="box" x="6" y="300" width="348" height="250" rx="12"/>
-  <text x="20" y="328" class="t-sm">Calico BGPPeer</text>
-  <text x="20" y="356" style="fill:var(--fg-2);font-size:11px">peerSelector: has(node-role.../master)</text>
-  <text x="20" y="392" class="t-sm ko" style="font-family:var(--sans)">매칭된 리플렉터</text>
-  <text class="fx-n3" x="20" y="456" style="fill:var(--ok);font:600 56px var(--sans)">3</text>
-  <text class="fx-n0" x="20" y="456" style="fill:var(--err);font:600 56px var(--sans)">0</text>
-  <rect class="fx-rr" x="96" y="418" width="76" height="30" rx="15"/><text x="134" y="438" text-anchor="middle" class="t-md">cp-1</text>
-  <rect class="fx-rr" x="180" y="418" width="76" height="30" rx="15"/><text x="218" y="438" text-anchor="middle" class="t-md">cp-2</text>
-  <rect class="fx-rr" x="264" y="418" width="76" height="30" rx="15"/><text x="302" y="438" text-anchor="middle" class="t-md">cp-3</text>
-  <text class="fx-ok ko" x="20" y="516" style="fill:var(--ok);font-size:12.5px">파드 라우트 반사 중</text>
-  <text class="fx-bad ko" x="20" y="516" style="fill:var(--err);font-size:12.5px">피어 0, 파드 라우트 전부 소멸</text></svg></div></figure>
+</svg></div></figure>
     <figure class="card"><div class="scroll">
-<svg class="d" viewBox="0 0 960 280" role="img" aria-label="컨트롤 플레인 라벨 하나가 사라진 일이 Reddit 전면 중단 314분으로 증폭됐다">
+<svg viewBox="0 0 960 280" role="img" aria-label="컨트롤 플레인 라벨 하나가 사라진 일이 Reddit 전면 중단 314분으로 증폭됐다">
   <defs><linearGradient id="amp" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#ff6166" stop-opacity=".05"/><stop offset="1" stop-color="#ff6166" stop-opacity=".28"/></linearGradient></defs>
   <text x="50" y="104" class="ko" style="fill:var(--fg-3);font-size:13px">원인</text>
   <rect x="40" y="116" width="290" height="48" rx="8" fill="#000" stroke="var(--line-2)"/>
@@ -1129,20 +880,7 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
   <text x="775" y="84" text-anchor="middle" class="ko" style="fill:var(--err);font-size:14px">결과</text>
   <text x="775" y="150" text-anchor="middle" class="ko" style="fill:var(--fg);font:600 34px var(--sans);letter-spacing:-1px">Reddit 전면 중단</text>
   <text x="775" y="206" text-anchor="middle" style="fill:var(--err);font:600 40px var(--sans);letter-spacing:-1px">314<tspan class="ko" style="font-size:20px;fill:var(--fg-2)"> 분</tspan></text>
-</svg>
-<svg class="m" viewBox="0 0 360 500" role="img" aria-label="컨트롤 플레인 라벨 하나가 사라진 일이 Reddit 전면 중단 314분으로 증폭됐다">
-  <defs><linearGradient id="ampm" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ff6166" stop-opacity=".05"/><stop offset="1" stop-color="#ff6166" stop-opacity=".28"/></linearGradient></defs>
-  <text x="20" y="20" class="ko" style="fill:var(--fg-3);font-size:12px">원인</text>
-  <rect x="20" y="30" width="320" height="44" rx="8" fill="#000" stroke="var(--line-2)"/>
-  <text x="180" y="57" text-anchor="middle" style="fill:var(--err);font-size:12px">node-role.kubernetes.io/master</text>
-  <line x1="58" y1="53" x2="302" y2="53" stroke="var(--err)" stroke-width="1.5"/>
-  <text x="180" y="96" text-anchor="middle" class="ko" style="fill:var(--fg-2);font-size:12.5px">컨트롤 플레인 라벨 1개</text>
-  <polygon points="170,108 190,108 340,320 20,320" fill="url(#ampm)"/>
-  <g class="ko" style="font-size:12px;fill:var(--fg-2)"><text x="180" y="170" text-anchor="middle">셀렉터 0대</text><text x="180" y="220" text-anchor="middle">리플렉터 0</text><text x="180" y="270" text-anchor="middle">파드 라우트 0</text></g>
-  <rect x="20" y="328" width="320" height="160" rx="14" fill="rgba(255,97,102,.06)" stroke="var(--err)"/>
-  <text x="180" y="362" text-anchor="middle" class="ko" style="fill:var(--err);font-size:13px">결과</text>
-  <text x="180" y="410" text-anchor="middle" class="ko" style="fill:var(--fg);font:600 28px var(--sans)">Reddit 전면 중단</text>
-  <text x="180" y="460" text-anchor="middle" style="fill:var(--err);font:600 36px var(--sans)">314<tspan class="ko" style="font-size:18px;fill:var(--fg-2)"> 분</tspan></text></svg></div></figure>
+</svg></div></figure>
     <div class="prose"><p>코드 버그도, 하드웨어 고장도, 트래픽 폭주도 아니었다. 업스트림이 미리 예고한 <strong>라벨 이름 변경 하나</strong>가 아무도 기억하지 못한 수작업 설정과 만나, 클러스터의 모든 파드 라우트를 지웠다.</p><p>컨트롤 플레인은 끝까지 정상이었고 노드도 모두 Ready였다. 가장 작은 변경이 가장 조용한 곳에서 가장 큰 장애를 만들었다.</p></div>
   </div>
 </section>
