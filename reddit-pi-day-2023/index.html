@@ -28,7 +28,7 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { -webkit-text-size-adjust: 100%; }
-body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+body { word-break: keep-all; overflow-wrap: anywhere; background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
 .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
 
@@ -225,10 +225,43 @@ footer a:hover { color: var(--fg); }
   .step:last-child, .lesson:last-child { border-bottom: 0 !important; }
 }
 
+.lblfx * { animation-duration: 9s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+.fx-hl { fill: rgba(255,97,102,0); animation-name: fxHl; }
+.fx-mtext { fill: var(--fg); animation-name: fxText; }
+.fx-master { transform-box: fill-box; animation-name: fxOut; }
+.fx-strike { stroke: var(--err); stroke-width: 1.5; stroke-dasharray: 290; stroke-dashoffset: 290; animation-name: fxStrike; }
+.fx-v123 { animation-name: fxShow1; } .fx-v124 { opacity: 0; animation-name: fxShow2; }
+.fx-gone { opacity: 0; animation-name: fxLate; }
+.fx-wire { stroke: var(--ok); stroke-dasharray: 4 4; fill: none; animation-name: fxWire; }
+.fx-n3 { animation-name: fxEarly; } .fx-n0 { opacity: 0; animation-name: fxLate; }
+.fx-rr { fill: rgba(69,222,197,.1); stroke: rgba(69,222,197,.5); animation-name: fxRr; }
+.fx-ok { animation-name: fxEarly; } .fx-bad { opacity: 0; animation-name: fxLate; }
+@keyframes fxShow1 { 0%, 22% { opacity: 1; } 26%, 94% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes fxShow2 { 0%, 22% { opacity: 0; } 26%, 94% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes fxHl { 0%, 24% { fill: rgba(255,97,102,0); } 30%, 44% { fill: rgba(255,97,102,.14); } 54%, 100% { fill: rgba(255,97,102,0); } }
+@keyframes fxText { 0%, 24% { fill: var(--fg); } 30%, 100% { fill: var(--err); } }
+@keyframes fxStrike { 0%, 30% { stroke-dashoffset: 290; } 40%, 100% { stroke-dashoffset: 0; } }
+@keyframes fxOut { 0%, 44% { opacity: 1; transform: none; } 54%, 94% { opacity: 0; transform: translateX(40px); } 100% { opacity: 1; transform: none; } }
+@keyframes fxEarly { 0%, 54% { opacity: 1; } 58%, 94% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes fxLate { 0%, 54% { opacity: 0; } 58%, 94% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes fxWire { 0%, 54% { stroke: var(--ok); opacity: 1; } 58%, 94% { stroke: var(--err); opacity: .3; } 100% { stroke: var(--ok); opacity: 1; } }
+@keyframes fxRr { 0%, 54% { fill: rgba(69,222,197,.1); stroke: rgba(69,222,197,.5); } 58%, 94% { fill: #000; stroke: var(--line-2); } 100% { fill: rgba(69,222,197,.1); stroke: rgba(69,222,197,.5); } }
+@media (prefers-reduced-motion: reduce) {
+  .lblfx * { animation: none !important; }
+  .fx-master, .fx-v123, .fx-n3, .fx-ok { opacity: 0; }
+  .fx-v124, .fx-gone, .fx-n0, .fx-bad { opacity: 1; }
+  .fx-rr { fill: #000; stroke: var(--line-2); }
+}
+
+.verdict { font-size: clamp(26px, 4vw, 40px); font-weight: 600; letter-spacing: -.03em; line-height: 1.3; margin: 0 0 36px; max-width: 900px; }
+.verdict span { color: var(--err); }
 .prose { max-width: 760px; margin: 0 0 28px; }
 .prose p { font-size: 16px; line-height: 1.8; color: var(--fg-2); margin: 0 0 14px; }
 .prose p:last-child { margin-bottom: 0; }
 .prose strong { color: var(--fg); font-weight: 600; }
+.prose a { color: var(--fg); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 4px; text-decoration-thickness: 1px; transition: text-decoration-color .15s; }
+.prose a:hover { text-decoration-color: var(--fg); }
+.prose a code { border-color: #555; }
 .prose code { font-family: var(--mono); font-size: .86em; color: var(--fg); border: 1px solid var(--line-2); border-radius: 5px; padding: 1px 6px; }
 section figure.card, section > .wrap > .card { margin: 0 0 32px; }
 .decision svg { max-width: 640px; margin: 0 auto; padding: 8px 0; }
@@ -266,8 +299,33 @@ figcaption.ok { color: var(--ok); }
 
 <section>
   <div class="wrap">
+    <div class="sec-h"><h2>3월 14일</h2><p>왜 "Pi-Day 장애"라고 부르나.</p></div>
+    <div class="prose"><p>장애는 <strong>2023년 3월 14일 화요일</strong>에 일어났다. 3월 14일은 원주율 π의 앞자리 3.14와 같아 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Pi_Day">파이 데이(Pi Day)</a>로 불린다.</p></div>
+    <figure class="card"><div class="scroll">
+<svg viewBox="0 0 960 300" role="img" aria-label="2023년 3월 14일, 파이 데이. 날짜 3.14, 원주율 3.14159, 장애 시간 314분이 같은 숫자로 겹친다">
+  <rect class="box" x="60" y="40" width="220" height="220" rx="16"/>
+  <path d="M61 92V56a15 15 0 0 1 15-15H264a15 15 0 0 1 15 15V92Z" fill="rgba(255,97,102,.12)"/>
+  <text x="170" y="74" text-anchor="middle" style="fill:var(--err);font-size:15px;letter-spacing:3px">MAR 2023</text>
+  <text x="170" y="196" text-anchor="middle" style="fill:var(--fg);font:600 96px var(--sans);letter-spacing:-4px">14</text>
+  <text x="170" y="236" text-anchor="middle" class="ko" style="fill:var(--fg-3);font-size:14px">화요일</text>
+  <text x="330" y="166" text-anchor="middle" style="fill:var(--fg-3);font:300 44px var(--sans)">=</text>
+  <rect class="zone" x="380" y="40" width="220" height="220" rx="16"/>
+  <text x="490" y="168" text-anchor="middle" style="fill:var(--fg);font:400 120px Georgia, 'Times New Roman', serif">π</text>
+  <text x="490" y="226" text-anchor="middle" style="fill:var(--fg-2);font-size:17px">3.14159…</text>
+  <text x="650" y="166" text-anchor="middle" style="fill:var(--fg-3);font:300 44px var(--sans)">=</text>
+  <rect x="700" y="40" width="220" height="220" rx="16" fill="rgba(255,97,102,.05)" stroke="rgba(255,97,102,.5)"/>
+  <text x="810" y="88" text-anchor="middle" class="ko" style="fill:var(--err);font-size:14px">장애 시간</text>
+  <text x="810" y="186" text-anchor="middle" style="fill:var(--err);font:600 88px var(--sans);letter-spacing:-4px">314</text>
+  <text x="810" y="230" text-anchor="middle" class="ko" style="fill:var(--fg-2);font-size:15px">분, 약 5시간 14분</text>
+</svg></div></figure>
+    <div class="prose"><p>공교롭게도 사이트가 멈춰 있던 시간도 <strong>314분</strong>이었다. 날짜와 장애 시간이 모두 π를 닮았고, Reddit 엔지니어링 팀은 포스트모템 제목을 <a target="_blank" rel="noopener" href="https://www.reddit.com/r/RedditEng/comments/11xx5o0/you_broke_reddit_the_piday_outage/">You Broke Reddit: The Pi-Day Outage</a>로 붙였다.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
     <div class="sec-h"><h2>발단</h2><p>장애 전, 이 클러스터는 어떤 곳이었나.</p></div>
-    <div class="prose"><p>Reddit은 여러 Kubernetes 클러스터 위에서 돈다. 그중 <strong>가장 오래되고 가장 큰 클러스터</strong>에 사이트의 레거시 코어가 올라가 있었다.</p></div><figure class="card"><div class="scroll">
+    <div class="prose"><p>Reddit은 여러 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes">Kubernetes</a> 클러스터 위에서 돈다. 그중 <strong>가장 오래되고 가장 큰 클러스터</strong>에 사이트의 레거시 코어가 올라가 있었다.</p></div><figure class="card"><div class="scroll">
 <svg viewBox="0 0 960 330" role="img" aria-label="Reddit 클러스터 구성: 표준 빌드 클러스터들과 별개로, 가장 오래되고 큰 레거시 코어 클러스터가 수작업 Calico 설정을 품고 있었다">
   <defs><marker id="af" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#666"/></marker></defs>
   <rect class="box" x="380" y="24" width="200" height="44" rx="22"/><text class="t-lg ko" x="480" y="51" text-anchor="middle">reddit.com 트래픽</text>
@@ -288,7 +346,7 @@ figcaption.ok { color: var(--ok); }
   </g>
   <text x="898" y="296" text-anchor="end" class="t-sm ko">설정이 서로 같음</text>
 </svg>
-</div></figure><div class="prose"><p>이 클러스터는 표준 도구가 생기기 전에 만들어졌다. 다른 클러스터와 달리 <strong>Calico BGP 설정을 손으로 넣은</strong> 상태였고, 그 설정을 만든 엔지니어들은 이미 다른 곳으로 옮긴 뒤였다. 누구도 이 설정이 노드 라벨에 의존한다는 사실을 기억하지 못했다.</p><p>Kubernetes 업그레이드 자체는 여러 번 해 온 일상 작업이었다. 2023년 3월 14일 파이 데이, 이 클러스터를 1.23에서 1.24로 올리는 작업이 평소 절차대로 시작됐다.</p></div><figure class="card"><div class="scroll">
+</div></figure><div class="prose"><p>이 클러스터는 표준 도구가 생기기 전에 만들어졌다. 다른 클러스터와 달리 <strong><a target="_blank" rel="noopener" href="https://github.com/projectcalico/calico">Calico</a> <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">BGP</a> 설정을 손으로 넣은</strong> 상태였고, 그 설정을 만든 엔지니어들은 이미 다른 곳으로 옮긴 뒤였다. 누구도 이 설정이 노드 라벨에 의존한다는 사실을 기억하지 못했다.</p><p>Kubernetes 업그레이드 자체는 여러 번 해 온 일상 작업이었다. 2023년 3월 14일 파이 데이, 이 클러스터를 1.23에서 1.24로 올리는 작업이 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/">평소 절차</a>대로 시작됐다.</p></div><figure class="card"><div class="scroll">
 <svg viewBox="0 0 960 210" role="img" aria-label="계획된 업그레이드 절차: etcd 백업, 컨트롤 플레인 한 대씩, 워커, 검증. 두 번째 단계에서 장애 발생">
   <defs><marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#666"/></marker></defs>
   <g>
@@ -310,14 +368,14 @@ figcaption.ok { color: var(--ok); }
   <rect x="288" y="170" width="148" height="26" rx="13" fill="#000" stroke="var(--err)"/><text x="362" y="187" text-anchor="middle" class="ko" style="fill:var(--err);font-size:11.5px">여기서 사이트 중단</text>
   <text x="713" y="170" text-anchor="middle" class="t-sm ko">도달하지 못함</text>
 </svg>
-</div></figure><div class="prose"><p>절차는 두 번째 단계에서 멈췄다. 컨트롤 플레인 노드가 1.24가 되는 순간, 사이트 전체가 응답을 멈췄다. 워커 노드는 아직 손대지도 않은 상태였다.</p></div>
+</div></figure><div class="prose"><p>절차는 두 번째 단계에서 멈췄다. <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/overview/components/">컨트롤 플레인</a> 노드가 1.24가 되는 순간, 사이트 전체가 응답을 멈췄다. 워커 노드는 아직 손대지도 않은 상태였다.</p></div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
     <div class="sec-h"><h2>배경</h2><p>장애를 이해하는 데 필요한 Kubernetes와 Calico 기본기.</p></div>
-    <div class="prose"><p>Kubernetes는 "이 컨테이너를 이만큼 띄워라" 같은 <strong>원하는 상태</strong>를 선언하면, 수많은 머신 위에서 그 상태를 계속 유지해 주는 시스템이다. 머신 한 대가 죽어도 컨트롤 플레인이 알아서 다른 곳에 다시 띄운다.</p></div><figure class="card"><div class="scroll">
+    <div class="prose"><p><a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes">Kubernetes</a>는 "이 컨테이너를 이만큼 띄워라" 같은 <strong><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/overview/">원하는 상태</a></strong>를 선언하면, 수많은 머신 위에서 그 상태를 계속 유지해 주는 시스템이다. 머신 한 대가 죽어도 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/overview/components/">컨트롤 플레인</a>이 알아서 다른 곳에 다시 띄운다.</p></div><figure class="card"><div class="scroll">
 <svg viewBox="0 0 960 300" role="img" aria-label="Cluster anatomy: control plane components talk through the API server, kubelet reports over node IPs, calico-node programs pod routes">
   <defs><marker id="am" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#666"/></marker></defs>
   <rect class="zone" x="30" y="30" width="430" height="240" rx="12"/><text class="ko t-sm" x="48" y="52" letter-spacing="1.5">컨트롤 플레인 노드</text>
@@ -336,14 +394,14 @@ figcaption.ok { color: var(--ok); }
   <path class="ln" d="M530 102H430" marker-end="url(#am)"/><text class="ko t-sm" x="480" y="92" text-anchor="middle" style="fill:var(--fg-2)">노드 IP</text>
   <path d="M820 132V182" stroke="var(--ok)" fill="none" marker-end="url(#am)"/><text x="830" y="162" class="ko t-sm" style="fill:var(--ok)">파드 라우트</text>
 </svg>
-</div></figure><div class="prose"><p>컨트롤 플레인의 모든 컴포넌트는 <strong>kube-apiserver</strong>를 거쳐서만 대화하고, 클러스터 상태는 전부 <strong>etcd</strong>에 저장된다. 워커 노드의 <strong>kubelet</strong>은 노드 IP로 API 서버에 접속해 "나는 살아 있다(Ready)"고 주기적으로 보고한다.</p><p>파드끼리의 통신은 Kubernetes가 직접 하지 않는다. <strong>CNI 플러그인</strong>이 노드마다 파드 CIDR을 나눠 주고, 어느 노드에서든 모든 파드 IP에 닿도록 만든다. Reddit은 CNI로 <strong>Calico</strong>를 썼다.</p><p>Calico의 BGP 모드에서는 노드마다 BGP 에이전트(calico-node)가 돌며 "10.0.1.0/24는 나에게 보내라"는 식으로 자기 파드 CIDR을 광고한다. 다른 노드는 이를 받아 커널 라우팅 테이블에 일반 라우트로 설치한다. 오버레이도 캡슐화도 없다.</p></div><figure class="card mesh1"><figcaption class="">풀 메시, Calico 기본값</figcaption><div class="mesh-row"><svg viewBox="0 0 220 200" aria-label="Full mesh of 8 nodes, 28 BGP sessions"><g stroke="#666" stroke-width=".8" opacity=".7"><line x1="110.0" y1="22.0" x2="165.2" y2="44.8"/><line x1="110.0" y1="22.0" x2="188.0" y2="100.0"/><line x1="110.0" y1="22.0" x2="165.2" y2="155.2"/><line x1="110.0" y1="22.0" x2="110.0" y2="178.0"/><line x1="110.0" y1="22.0" x2="54.8" y2="155.2"/><line x1="110.0" y1="22.0" x2="32.0" y2="100.0"/><line x1="110.0" y1="22.0" x2="54.8" y2="44.8"/><line x1="165.2" y1="44.8" x2="188.0" y2="100.0"/><line x1="165.2" y1="44.8" x2="165.2" y2="155.2"/><line x1="165.2" y1="44.8" x2="110.0" y2="178.0"/><line x1="165.2" y1="44.8" x2="54.8" y2="155.2"/><line x1="165.2" y1="44.8" x2="32.0" y2="100.0"/><line x1="165.2" y1="44.8" x2="54.8" y2="44.8"/><line x1="188.0" y1="100.0" x2="165.2" y2="155.2"/><line x1="188.0" y1="100.0" x2="110.0" y2="178.0"/><line x1="188.0" y1="100.0" x2="54.8" y2="155.2"/><line x1="188.0" y1="100.0" x2="32.0" y2="100.0"/><line x1="188.0" y1="100.0" x2="54.8" y2="44.8"/><line x1="165.2" y1="155.2" x2="110.0" y2="178.0"/><line x1="165.2" y1="155.2" x2="54.8" y2="155.2"/><line x1="165.2" y1="155.2" x2="32.0" y2="100.0"/><line x1="165.2" y1="155.2" x2="54.8" y2="44.8"/><line x1="110.0" y1="178.0" x2="54.8" y2="155.2"/><line x1="110.0" y1="178.0" x2="32.0" y2="100.0"/><line x1="110.0" y1="178.0" x2="54.8" y2="44.8"/><line x1="54.8" y1="155.2" x2="32.0" y2="100.0"/><line x1="54.8" y1="155.2" x2="54.8" y2="44.8"/><line x1="32.0" y1="100.0" x2="54.8" y2="44.8"/></g><g fill="#000" stroke="#a1a1a1"><circle cx="110.0" cy="22.0" r="6"/><circle cx="165.2" cy="44.8" r="6"/><circle cx="188.0" cy="100.0" r="6"/><circle cx="165.2" cy="155.2" r="6"/><circle cx="110.0" cy="178.0" r="6"/><circle cx="54.8" cy="155.2" r="6"/><circle cx="32.0" cy="100.0" r="6"/><circle cx="54.8" cy="44.8" r="6"/></g></svg><div class="n">4,950<small>세션, 노드 100대 기준</small></div></div></figure><div class="prose"><p>기본값은 모든 노드가 다른 모든 노드와 직접 BGP 세션을 맺는 <strong>풀 메시</strong>다. 세션 수가 n(n-1)/2로 늘어나기 때문에, Calico 문서는 노드 100대 안팎부터 다른 방식을 권한다.</p></div><figure class="card mesh1"><figcaption class="ok">라우트 리플렉터</figcaption><div class="mesh-row"><svg viewBox="0 0 220 200" aria-label="Two route reflectors and six clients, 13 BGP sessions"><g stroke="#45dec5" stroke-width=".8" opacity=".5"><line x1="150.0" y1="30.7" x2="80" y2="100"/><line x1="150.0" y1="30.7" x2="140" y2="100"/><line x1="190.0" y1="100.0" x2="80" y2="100"/><line x1="190.0" y1="100.0" x2="140" y2="100"/><line x1="150.0" y1="169.3" x2="80" y2="100"/><line x1="150.0" y1="169.3" x2="140" y2="100"/><line x1="70.0" y1="169.3" x2="80" y2="100"/><line x1="70.0" y1="169.3" x2="140" y2="100"/><line x1="30.0" y1="100.0" x2="80" y2="100"/><line x1="30.0" y1="100.0" x2="140" y2="100"/><line x1="70.0" y1="30.7" x2="80" y2="100"/><line x1="70.0" y1="30.7" x2="140" y2="100"/></g><line x1="80" y1="100" x2="140" y2="100" stroke="#45dec5"/><circle cx="150.0" cy="30.7" r="6" fill="#000" stroke="#a1a1a1"/><circle cx="190.0" cy="100.0" r="6" fill="#000" stroke="#a1a1a1"/><circle cx="150.0" cy="169.3" r="6" fill="#000" stroke="#a1a1a1"/><circle cx="70.0" cy="169.3" r="6" fill="#000" stroke="#a1a1a1"/><circle cx="30.0" cy="100.0" r="6" fill="#000" stroke="#a1a1a1"/><circle cx="70.0" cy="30.7" r="6" fill="#000" stroke="#a1a1a1"/><g fill="rgba(69,222,197,.15)" stroke="#45dec5"><circle cx="80" cy="100" r="9"/><circle cx="140" cy="100" r="9"/></g><text x="80" y="124" text-anchor="middle" class="t-sm" style="fill:#45dec5">RR</text><text x="140" y="124" text-anchor="middle" class="t-sm" style="fill:#45dec5">RR</text></svg><div class="n">294<small>세션, 노드 100대, 리플렉터 3대</small></div></div></figure><div class="prose"><p><strong>라우트 리플렉터</strong>는 라우트를 중계하는 BGP 피어다. 노드는 리플렉터 몇 대와만 세션을 맺고, 리플렉터가 받은 라우트를 다른 노드에 다시 뿌린다. 큰 클러스터는 풀 메시를 끄고 리플렉터에만 의존한다.</p><p>이 구조의 대가는 분명하다. 풀 메시를 끈 상태에서 <strong>리플렉터가 하나도 없으면, 어떤 노드도 다른 노드의 파드 라우트를 배우지 못한다.</strong></p></div>
+</div></figure><div class="prose"><p>컨트롤 플레인의 모든 컴포넌트는 <strong><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/">kube-apiserver</a></strong>를 거쳐서만 대화하고, 클러스터 상태는 전부 <strong><a target="_blank" rel="noopener" href="https://github.com/etcd-io/etcd">etcd</a></strong>에 저장된다. 워커 노드의 <strong><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/">kubelet</a></strong>은 노드 IP로 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/">API 서버</a>에 접속해 "나는 살아 있다(<a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/architecture/nodes/">Ready</a>)"고 주기적으로 보고한다.</p><p>파드끼리의 통신은 Kubernetes가 직접 하지 않는다. <strong><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/">CNI 플러그인</a></strong>이 노드마다 파드 CIDR을 나눠 주고, 어느 노드에서든 모든 파드 IP에 닿도록 만든다. Reddit은 CNI로 <strong><a target="_blank" rel="noopener" href="https://github.com/projectcalico/calico">Calico</a></strong>를 썼다.</p><p>Calico의 <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">BGP</a> 모드에서는 노드마다 BGP 에이전트(<a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/reference/configure-calico-node">calico-node</a>)가 돌며 "10.0.1.0/24는 나에게 보내라"는 식으로 자기 파드 CIDR을 광고한다. 다른 노드는 이를 받아 커널 라우팅 테이블에 일반 라우트로 설치한다. 오버레이도 캡슐화도 없다.</p></div><figure class="card mesh1"><figcaption class="">풀 메시, Calico 기본값</figcaption><div class="mesh-row"><svg viewBox="0 0 220 200" aria-label="Full mesh of 8 nodes, 28 BGP sessions"><g stroke="#666" stroke-width=".8" opacity=".7"><line x1="110.0" y1="22.0" x2="165.2" y2="44.8"/><line x1="110.0" y1="22.0" x2="188.0" y2="100.0"/><line x1="110.0" y1="22.0" x2="165.2" y2="155.2"/><line x1="110.0" y1="22.0" x2="110.0" y2="178.0"/><line x1="110.0" y1="22.0" x2="54.8" y2="155.2"/><line x1="110.0" y1="22.0" x2="32.0" y2="100.0"/><line x1="110.0" y1="22.0" x2="54.8" y2="44.8"/><line x1="165.2" y1="44.8" x2="188.0" y2="100.0"/><line x1="165.2" y1="44.8" x2="165.2" y2="155.2"/><line x1="165.2" y1="44.8" x2="110.0" y2="178.0"/><line x1="165.2" y1="44.8" x2="54.8" y2="155.2"/><line x1="165.2" y1="44.8" x2="32.0" y2="100.0"/><line x1="165.2" y1="44.8" x2="54.8" y2="44.8"/><line x1="188.0" y1="100.0" x2="165.2" y2="155.2"/><line x1="188.0" y1="100.0" x2="110.0" y2="178.0"/><line x1="188.0" y1="100.0" x2="54.8" y2="155.2"/><line x1="188.0" y1="100.0" x2="32.0" y2="100.0"/><line x1="188.0" y1="100.0" x2="54.8" y2="44.8"/><line x1="165.2" y1="155.2" x2="110.0" y2="178.0"/><line x1="165.2" y1="155.2" x2="54.8" y2="155.2"/><line x1="165.2" y1="155.2" x2="32.0" y2="100.0"/><line x1="165.2" y1="155.2" x2="54.8" y2="44.8"/><line x1="110.0" y1="178.0" x2="54.8" y2="155.2"/><line x1="110.0" y1="178.0" x2="32.0" y2="100.0"/><line x1="110.0" y1="178.0" x2="54.8" y2="44.8"/><line x1="54.8" y1="155.2" x2="32.0" y2="100.0"/><line x1="54.8" y1="155.2" x2="54.8" y2="44.8"/><line x1="32.0" y1="100.0" x2="54.8" y2="44.8"/></g><g fill="#000" stroke="#a1a1a1"><circle cx="110.0" cy="22.0" r="6"/><circle cx="165.2" cy="44.8" r="6"/><circle cx="188.0" cy="100.0" r="6"/><circle cx="165.2" cy="155.2" r="6"/><circle cx="110.0" cy="178.0" r="6"/><circle cx="54.8" cy="155.2" r="6"/><circle cx="32.0" cy="100.0" r="6"/><circle cx="54.8" cy="44.8" r="6"/></g></svg><div class="n">4,950<small>세션, 노드 100대 기준</small></div></div></figure><div class="prose"><p>기본값은 모든 노드가 다른 모든 노드와 직접 BGP 세션을 맺는 <strong><a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">풀 메시</a></strong>다. 세션 수가 n(n-1)/2로 늘어나기 때문에, Calico 문서는 노드 100대 안팎부터 다른 방식을 권한다.</p></div><figure class="card mesh1"><figcaption class="ok">라우트 리플렉터</figcaption><div class="mesh-row"><svg viewBox="0 0 220 200" aria-label="Two route reflectors and six clients, 13 BGP sessions"><g stroke="#45dec5" stroke-width=".8" opacity=".5"><line x1="150.0" y1="30.7" x2="80" y2="100"/><line x1="150.0" y1="30.7" x2="140" y2="100"/><line x1="190.0" y1="100.0" x2="80" y2="100"/><line x1="190.0" y1="100.0" x2="140" y2="100"/><line x1="150.0" y1="169.3" x2="80" y2="100"/><line x1="150.0" y1="169.3" x2="140" y2="100"/><line x1="70.0" y1="169.3" x2="80" y2="100"/><line x1="70.0" y1="169.3" x2="140" y2="100"/><line x1="30.0" y1="100.0" x2="80" y2="100"/><line x1="30.0" y1="100.0" x2="140" y2="100"/><line x1="70.0" y1="30.7" x2="80" y2="100"/><line x1="70.0" y1="30.7" x2="140" y2="100"/></g><line x1="80" y1="100" x2="140" y2="100" stroke="#45dec5"/><circle cx="150.0" cy="30.7" r="6" fill="#000" stroke="#a1a1a1"/><circle cx="190.0" cy="100.0" r="6" fill="#000" stroke="#a1a1a1"/><circle cx="150.0" cy="169.3" r="6" fill="#000" stroke="#a1a1a1"/><circle cx="70.0" cy="169.3" r="6" fill="#000" stroke="#a1a1a1"/><circle cx="30.0" cy="100.0" r="6" fill="#000" stroke="#a1a1a1"/><circle cx="70.0" cy="30.7" r="6" fill="#000" stroke="#a1a1a1"/><g fill="rgba(69,222,197,.15)" stroke="#45dec5"><circle cx="80" cy="100" r="9"/><circle cx="140" cy="100" r="9"/></g><text x="80" y="124" text-anchor="middle" class="t-sm" style="fill:#45dec5">RR</text><text x="140" y="124" text-anchor="middle" class="t-sm" style="fill:#45dec5">RR</text></svg><div class="n">294<small>세션, 노드 100대, 리플렉터 3대</small></div></div></figure><div class="prose"><p><strong><a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">라우트 리플렉터</a></strong>는 라우트를 중계하는 BGP 피어다. 노드는 리플렉터 몇 대와만 세션을 맺고, 리플렉터가 받은 라우트를 다른 노드에 다시 뿌린다. 큰 클러스터는 풀 메시를 끄고 리플렉터에만 의존한다.</p><p>이 구조의 대가는 분명하다. 풀 메시를 끈 상태에서 <strong>리플렉터가 하나도 없으면, 어떤 노드도 다른 노드의 파드 라우트를 배우지 못한다.</strong></p></div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
     <div class="sec-h"><h2>아키텍처</h2><p>Reddit 레거시 클러스터의 BGP 토폴로지 (단순화).</p></div>
-    <div class="prose"><p>이 클러스터의 라우트 리플렉터는 컨트롤 플레인 노드 위에서 돌았다. 워커 노드는 리플렉터와 BGP 세션을 맺어 다른 노드의 파드 CIDR을 배웠다.</p></div><figure class="card"><figcaption class="">1.23, 정상</figcaption><div class="scroll">
+    <div class="prose"><p>이 클러스터의 <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">라우트 리플렉터</a>는 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/overview/components/">컨트롤 플레인</a> 노드 위에서 돌았다. 워커 노드는 리플렉터와 <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">BGP</a> 세션을 맺어 다른 노드의 파드 CIDR을 배웠다.</p></div><figure class="card"><figcaption class="">1.23, 정상</figcaption><div class="scroll">
 <svg class="arch" data-v="123" viewBox="0 0 960 560" role="img">
   <title>Calico BGP 토폴로지: 워커 노드는 node-role.kubernetes.io/master 라벨로 선택된 컨트롤 플레인 노드의 라우트 리플렉터와 피어링한다</title>
   <defs>
@@ -443,7 +501,7 @@ figcaption.ok { color: var(--ok); }
   <g class="ok-only"><rect x="376" y="488" width="208" height="24" rx="12" fill="#000" stroke="rgba(69,222,197,.4)"/><text x="480" y="504" text-anchor="middle" style="fill:var(--ok);font-size:11.5px" class="ko">10.0.1.7에서 10.0.4.3 정상</text></g>
   <g class="err-only"><rect x="356" y="488" width="248" height="24" rx="12" fill="#000" stroke="var(--err)"/><text x="480" y="504" text-anchor="middle" style="fill:var(--err);font-size:11.5px" class="ko">10.0.1.7에서 10.0.4.3 도달 불가</text></g>
 </svg>
-</div></figure><div class="prose"><p>문제는 Calico가 리플렉터를 <strong>어떻게 찾느냐</strong>였다. 수년 전 손으로 적용된 BGPPeer 설정은 <code>node-role.kubernetes.io/master</code> 라벨이 붙은 노드를 리플렉터로 골랐다.</p></div><figure class="card"><pre><span class="c"># 업그레이드 후 노드 오브젝트</span>
+</div></figure><div class="prose"><p>문제는 <a target="_blank" rel="noopener" href="https://github.com/projectcalico/calico">Calico</a>가 리플렉터를 <strong>어떻게 찾느냐</strong>였다. 수년 전 손으로 적용된 <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/reference/resources/bgppeer">BGPPeer</a> 설정은 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/labels-annotations-taints/"><code>node-role.kubernetes.io/master</code></a> 라벨이 붙은 노드를 리플렉터로 골랐다.</p></div><figure class="card"><pre><span class="c"># 업그레이드 후 노드 오브젝트</span>
 <span class="del">- node-role.kubernetes.io/master: ""</span><span class="add">+ node-role.kubernetes.io/control-plane: ""</span>
 <span class="c"># Calico BGP 피어링, 수년 전 수작업 적용</span>
 <span class="hl">kind</span>: BGPPeer
@@ -551,14 +609,14 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
   <g class="ok-only"><rect x="376" y="488" width="208" height="24" rx="12" fill="#000" stroke="rgba(69,222,197,.4)"/><text x="480" y="504" text-anchor="middle" style="fill:var(--ok);font-size:11.5px" class="ko">10.0.1.7에서 10.0.4.3 정상</text></g>
   <g class="err-only"><rect x="356" y="488" width="248" height="24" rx="12" fill="#000" stroke="var(--err)"/><text x="480" y="504" text-anchor="middle" style="fill:var(--err);font-size:11.5px" class="ko">10.0.1.7에서 10.0.4.3 도달 불가</text></g>
 </svg>
-</div></figure><div class="prose"><p>노드는 여전히 Ready였고 파드도 그대로 떠 있었다. 하지만 노드 사이에 라우트가 하나도 남지 않아, <strong>다른 노드의 파드로 가는 모든 트래픽이 갈 곳을 잃었다.</strong></p></div>
+</div></figure><div class="prose"><p>노드는 여전히 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/architecture/nodes/">Ready</a>였고 파드도 그대로 떠 있었다. 하지만 노드 사이에 라우트가 하나도 남지 않아, <strong>다른 노드의 파드로 가는 모든 트래픽이 갈 곳을 잃었다.</strong></p></div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
     <div class="sec-h"><h2>업그레이드 진행</h2><p>컨트롤 플레인을 한 대씩 올릴 때마다 리플렉터도 한 대씩 사라졌다.</p></div>
-    <div class="prose"><p>업그레이드는 인플레이스 방식으로, 컨트롤 플레인 노드부터 한 대씩 진행됐다. 노드가 1.24가 될 때마다 master 라벨이 빠졌고, 그 노드는 리플렉터 후보에서 제외됐다.</p></div><div class="card upg">
+    <div class="prose"><p>업그레이드는 인플레이스 방식으로, <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/overview/components/">컨트롤 플레인</a> 노드부터 한 대씩 진행됐다. 노드가 1.24가 될 때마다 master 라벨이 빠졌고, 그 노드는 리플렉터 후보에서 제외됐다.</p></div><div class="card upg">
       <table>
         <tr><th>노드</th><th>이전</th><th>cp-1 완료</th><th>cp-2 완료</th><th>cp-3 완료</th></tr>
         <tr><td>cp-1</td><td><span class="vc">1.23</span><span class="vc lab">master</span></td><td><span class="vc new">1.24</span><span class="vc gone">master</span></td><td><span class="vc new">1.24</span><span class="vc gone">master</span></td><td><span class="vc new">1.24</span><span class="vc gone">master</span></td></tr>
@@ -582,33 +640,33 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
       <div class="step"><span class="bar" style="background:var(--err)"></span><div class="t">BGP 붕괴</div><div class="d">리플렉터 없음, 파드 라우트 없음</div></div>
       <div class="step"><span class="bar" style="background:var(--err)"></span><div class="t">파드 네트워크 중단</div><div class="d">파드 간 통신, DNS, Service 실패</div></div>
       <div class="step"><span class="bar" style="background:var(--err)"></span><div class="t">Reddit 중단</div><div class="d">314분</div></div>
-    </div><div class="prose"><p>master라는 이름은 갑자기 사라진 것이 아니다. Kubernetes는 여러 릴리즈에 걸쳐 master를 control-plane으로 바꿔 왔고, 릴리즈 노트에도 적혀 있었다.</p></div><div class="card ver">
+    </div><div class="prose"><p>master라는 이름은 갑자기 사라진 것이 아니다. <a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes">Kubernetes</a>는 여러 릴리즈에 걸쳐 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/enhancements/tree/master/keps/sig-cluster-lifecycle/kubeadm/2067-rename-master-label-taint">master를 control-plane으로 바꿔</a> 왔고, <a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.24.md">릴리즈 노트</a>에도 적혀 있었다.</p></div><div class="card ver">
       <div class="warn"><div class="v">1.20</div><div class="d">kubeadm이 control-plane 추가, master 지원 중단 예고</div></div>
       <div><div class="v">1.21에서 1.23</div><div class="d">컨트롤 플레인 노드에 두 라벨 공존</div></div>
       <div class="err"><div class="v">1.24</div><div class="d">master 라벨 더 이상 부여 안 함</div></div>
       <div><div class="v">Reddit</div><div class="d">RR 셀렉터는 여전히 master</div></div>
-    </div><div class="prose"><p>하지만 이 라벨을 읽는 수작업 셀렉터는 릴리즈 노트를 훑어볼 때 놓치기 쉽다. 게다가 셀렉터가 0대를 매칭해도 <strong>어떤 에러도 나지 않는다.</strong> Calico는 그저 대화할 피어가 없었을 뿐이다.</p></div>
+    </div><div class="prose"><p>하지만 이 라벨을 읽는 수작업 셀렉터는 릴리즈 노트를 훑어볼 때 놓치기 쉽다. 게다가 셀렉터가 0대를 매칭해도 <strong>어떤 에러도 나지 않는다.</strong> <a target="_blank" rel="noopener" href="https://github.com/projectcalico/calico">Calico</a>는 그저 대화할 피어가 없었을 뿐이다.</p></div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
     <div class="sec-h"><h2>패킷이 사라지는 곳</h2><p>라우트가 없는 노드에서 실제로 일어나는 일.</p></div>
-    <div class="prose"><p>Calico는 BGP로 배운 파드 CIDR을 노드 커널 라우팅 테이블에 <code>proto bird</code> 라우트로 기록한다. 패킷은 이 테이블을 보고 다음 홉을 정한다.</p></div><figure class="card"><div class="scroll">
+    <div class="prose"><p><a target="_blank" rel="noopener" href="https://github.com/projectcalico/calico">Calico</a>는 <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">BGP</a>로 배운 파드 CIDR을 노드 커널 라우팅 테이블에 <a target="_blank" rel="noopener" href="https://bird.network.cz/"><code>proto bird</code></a> 라우트로 기록한다. 패킷은 이 테이블을 보고 다음 홉을 정한다.</p></div><figure class="card"><div class="scroll">
 <svg viewBox="0 0 960 330" role="img" aria-label="worker-a의 파드 10.0.1.7에서 worker-d의 파드 10.0.4.3으로 가는 패킷 경로. 1.23은 BGP 라우트로 전달, 1.24는 라우트가 없어 드롭">
   <defs><marker id="ap" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#45dec5"/></marker></defs>
   <text x="30" y="26" style="fill:var(--ok);font-size:12px">1.23</text><path class="ln" d="M74 90H130"/><circle cx="60" cy="90" r="14" class="box"/><text class="t-sm" x="60" y="122" text-anchor="middle">10.0.1.7</text><rect class="box" x="130" y="40" width="330" height="100" rx="8"/><text class="t-lg" x="146" y="64">worker-a</text><text class="t-sm" x="444" y="64" text-anchor="end">$ ip route</text><text class="t-md" x="146" y="86">10.0.2.0/24 via 10.0.100.12 proto bird</text><text class="t-md" x="146" y="104">10.0.3.0/24 via 10.0.100.13 proto bird</text><text x="146" y="122" style="fill:var(--ok);font-size:11.5px">10.0.4.0/24 via 10.0.100.14 proto bird</text><path d="M460 90H650" stroke="var(--ok)" stroke-width="1.5" fill="none" marker-end="url(#ap)"/><text x="555" y="82" text-anchor="middle" style="fill:var(--ok);font-size:11px" class="ko">다음 홉 10.0.100.14</text><path d="M820 90H876" stroke="var(--ok)" stroke-width="1.5" marker-end="url(#ap)"/><rect class="box" x="650" y="60" width="170" height="60" rx="8"/><text class="t-lg" x="666" y="86">worker-d</text><text class="t-sm" x="666" y="104">10.0.100.14</text><circle cx="890" cy="90" r="14" class="box-ok"/><text class="t-sm" x="890" y="122" text-anchor="middle">10.0.4.3</text>
   <line x1="30" y1="172" x2="930" y2="172" stroke="var(--line)"/>
   <text x="30" y="192" style="fill:var(--err);font-size:12px">1.24</text><path class="ln" d="M74 256H130"/><circle cx="60" cy="256" r="14" class="box"/><text class="t-sm" x="60" y="288" text-anchor="middle">10.0.1.7</text><rect class="box" x="130" y="206" width="330" height="100" rx="8"/><text class="t-lg" x="146" y="230">worker-a</text><text class="t-sm" x="444" y="230" text-anchor="end">$ ip route</text><text x="146" y="252" style="fill:var(--err);font-size:11.5px" class="ko">(bird 라우트 없음)</text><text class="ko t-sm" x="146" y="270">10.0.4.3은 기본 라우트에만 매칭</text><path d="M460 256H560" stroke="var(--err)" stroke-width="1.5" stroke-dasharray="5 5" fill="none"/><path d="M566 248l16 16M582 248l-16 16" stroke="var(--err)" stroke-width="2"/><text x="574" y="286" text-anchor="middle" style="fill:var(--err);font-size:11px" class="ko">드롭</text><rect class="box" x="650" y="226" width="170" height="60" rx="8"/><text class="t-lg" x="666" y="252">worker-d</text><text class="t-sm" x="666" y="270">10.0.100.14</text><circle cx="890" cy="256" r="14" class="box-err"/><text class="t-sm" x="890" y="288" text-anchor="middle">10.0.4.3</text>
 </svg>
-</div></figure><div class="prose"><p>1.24에서는 bird 라우트가 하나도 없다. 10.0.4.3으로 가는 패킷은 기본 라우트로 빠지고, 그 너머의 네트워크는 파드 IP를 모르기 때문에 버린다. 파드 간 통신, CoreDNS, Service가 모두 이 경로를 쓴다.</p></div>
+</div></figure><div class="prose"><p>1.24에서는 bird 라우트가 하나도 없다. 10.0.4.3으로 가는 패킷은 기본 라우트로 빠지고, 그 너머의 네트워크는 파드 IP를 모르기 때문에 버린다. 파드 간 통신, <a target="_blank" rel="noopener" href="https://github.com/coredns/coredns">CoreDNS</a>, <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/services-networking/service/">Service</a>가 모두 이 경로를 쓴다.</p></div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
     <div class="sec-h"><h2>왜 안 보였나</h2><p>컨트롤 플레인의 모든 신호는 정상이었다.</p></div>
-    <div class="prose"><p>장애 중에도 대시보드 대부분은 초록색이었다. API 서버, etcd, 스케줄러는 멀쩡했고, 모든 노드가 Ready를 보고했다.</p></div><figure class="card"><div class="matrix">
+    <div class="prose"><p>장애 중에도 대시보드 대부분은 초록색이었다. <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/">API 서버</a>, <a target="_blank" rel="noopener" href="https://github.com/etcd-io/etcd">etcd</a>, 스케줄러는 멀쩡했고, 모든 노드가 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/architecture/nodes/">Ready</a>를 보고했다.</p></div><figure class="card"><div class="matrix">
           <div class="row"><div><span class="layer">컨트롤 플레인</span>kube-apiserver</div><span class="badge ok">정상</span></div>
           <div class="row"><div><span class="layer">컨트롤 플레인</span>etcd</div><span class="badge ok">정상</span></div>
           <div class="row"><div><span class="layer">컨트롤 플레인</span>scheduler</div><span class="badge ok">정상</span></div>
@@ -616,7 +674,7 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
           <div class="row"><div><span class="layer">네트워크</span>BGP 라우트 리플렉터</div><span class="badge err">사라짐</span></div>
           <div class="row"><div><span class="layer">네트워크</span>파드 간 통신, CoreDNS, Service</div><span class="badge err">중단</span></div>
           <div class="row"><div><span class="layer">서비스</span>reddit.com</div><span class="badge err">중단</span></div>
-        </div></figure><div class="prose"><p>이유는 <strong>경로가 두 개</strong>이기 때문이다. kubelet은 호스트 네트워크의 노드 IP로 API 서버에 하트비트를 보낸다. 이 경로는 파드 라우트를 전혀 쓰지 않는다.</p><p>반면 파드 간 트래픽은 대상 노드의 파드 CIDR로 가는 라우트가 있어야 한다. 그 라우트는 BGP로만 들어왔고, BGP에는 피어가 없었다. 결국 <strong>노드는 Ready인데 아무것도 라우팅되지 않는</strong> 상태가 됐다.</p></div>
+        </div></figure><div class="prose"><p>이유는 <strong>경로가 두 개</strong>이기 때문이다. <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/">kubelet</a>은 호스트 네트워크의 노드 IP로 API 서버에 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/architecture/leases/">하트비트</a>를 보낸다. 이 경로는 파드 라우트를 전혀 쓰지 않는다.</p><p>반면 파드 간 트래픽은 대상 노드의 파드 CIDR로 가는 라우트가 있어야 한다. 그 라우트는 <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">BGP</a>로만 들어왔고, BGP에는 피어가 없었다. 결국 <strong>노드는 Ready인데 아무것도 라우팅되지 않는</strong> 상태가 됐다.</p></div>
   </div>
 </section>
 
@@ -658,7 +716,7 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
             <text x="16" y="68" class="ko t-md">새 형식으로 옮긴다.</text>
             <text x="16" y="86" class="ko t-md">되돌리는 경로가 없다.</text>
           </g>
-        </svg></figure><div class="prose"><p>Kubernetes는 <strong>다운그레이드를 지원하지 않는다.</strong> 업그레이드된 API 서버는 etcd에 저장된 오브젝트를 새 형식으로 다시 쓸 수 있고, 구버전 API 서버는 이를 읽지 못할 수 있다. 지원되는 복귀 경로는 업그레이드 전에 찍은 etcd 스냅샷뿐이다.</p><p>이 규모에서 백업 복원을 실제로 해 본 적은 없었다. 복원 후에는 인증서와 컴포넌트 설정 불일치를 하나씩 바로잡아야 했다.</p></div><figure class="card"><div class="phases">
+        </svg></figure><div class="prose"><p><a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes">Kubernetes</a>는 <strong><a target="_blank" rel="noopener" href="https://kubernetes.io/releases/version-skew-policy/">다운그레이드를 지원하지 않는다</a>.</strong> 업그레이드된 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/">API 서버</a>는 etcd에 저장된 오브젝트를 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/tasks/manage-kubernetes-objects/storage-version-migration/">새 형식으로 다시</a> 쓸 수 있고, 구버전 API 서버는 이를 읽지 못할 수 있다. 지원되는 복귀 경로는 업그레이드 전에 찍은 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/">etcd 스냅샷</a>뿐이다.</p><p>이 규모에서 백업 복원을 실제로 해 본 적은 없었다. 복원 후에는 인증서와 컴포넌트 설정 불일치를 하나씩 바로잡아야 했다.</p></div><figure class="card"><div class="phases">
           <div class="ph bad"><div class="b">1</div><div><div class="t">업그레이드 시작, 사이트 장애</div><div class="d">파드 네트워크 분단</div></div></div>
           <div class="ph hot"><div class="b">2</div><div><div class="t">진단</div><div class="d">컨트롤 플레인 정상, 데이터 플레인 사망</div></div></div>
           <div class="ph hot"><div class="b">3</div><div><div class="t">롤백 결정</div><div class="d">수 시간, 원인 미확인</div></div></div>
@@ -666,7 +724,7 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
           <div class="ph hot"><div class="b">5</div><div><div class="t">복원 드리프트 수정</div><div class="d">인증서, 컴포넌트 설정</div></div></div>
           <div class="ph good"><div class="b">6</div><div><div class="t">Reddit 복구</div><div class="d">트래픽 증가, 캐시 워밍</div></div></div>
           <div class="ph"><div class="b">7</div><div><div class="t">근본 원인 발견</div><div class="d">제거된 라벨에 걸린 RR 셀렉터</div></div></div>
-        </div></figure><div class="prose"><p>복원은 클러스터 상태를 스냅샷 시점으로 <strong>되감는다.</strong> 스냅샷 이후 기록된 오브젝트는 사라지고, 컨트롤러가 다시 수렴시켜야 한다.</p></div><figure class="card"><div class="scroll">
+        </div></figure><div class="prose"><p>복원은 클러스터 상태를 스냅샷 시점으로 <strong>되감는다.</strong> 스냅샷 이후 기록된 오브젝트는 사라지고, <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/architecture/controller/">컨트롤러</a>가 다시 수렴시켜야 한다.</p></div><figure class="card"><div class="scroll">
 <svg viewBox="0 0 960 190" role="img" aria-label="복원 타임라인: 상태가 업그레이드 전 etcd 스냅샷으로 되감기고, 스냅샷과 복원 사이의 쓰기는 유실된다">
   <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#555" stroke-width="1.5"/></pattern></defs>
   <rect x="150" y="78" width="570" height="24" fill="url(#hatch)" opacity=".8"/>
@@ -692,7 +750,7 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
     <div class="prose"><p>핵심은 리플렉터를 고르는 기준을 <strong>업스트림이 바꿀 수 있는 라벨에서 떼어 내는 것</strong>이다. 아래는 예시이며 Reddit의 실제 패치는 아니다.</p></div><figure class="card"><pre><span class="c"># BGPPeer: 누가 누구와 피어링하나</span>
 <span class="del">- peerSelector: has(node-role.kubernetes.io/master)</span><span class="add">+ peerSelector: has(route-reflector)</span>
 <span class="c"># 리플렉터 노드, 의도적으로 라벨 부여</span>
-<span class="add">+ route-reflector: "true"</span></pre></figure><div class="prose"><p>수작업으로 넣은 클러스터 설정은 소스 관리로 옮겨 다른 변경처럼 리뷰한다. 그리고 어느 노드든 Established 상태의 BGP 피어가 0이 되면 바로 알람이 울리도록 한다.</p></div>
+<span class="add">+ route-reflector: "true"</span></pre></figure><div class="prose"><p>수작업으로 넣은 클러스터 설정은 소스 관리로 옮겨 다른 변경처럼 리뷰한다. 그리고 어느 노드든 Established 상태의 <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">BGP</a> 피어가 0이 되면 바로 알람이 울리도록 한다.</p></div>
   </div>
 </section>
 
@@ -720,16 +778,75 @@ matches: <span class="m0">0대</span></pre></figure><div class="prose"><p>1.24�
   </div>
 </section>
 
+<section>
+  <div class="wrap">
+    <div class="sec-h"><h2>결론</h2><p></p></div>
+    <p class="verdict">314분 동안의 전면 장애.<br>그 발단은 고작 <span>컨트롤 플레인 노드에서 사라진 라벨 하나</span>였다.</p>
+    <figure class="card"><figcaption>업그레이드 순간, cp 노드의 라벨</figcaption><div class="scroll">
+<svg class="lblfx" viewBox="0 0 960 330" role="img" aria-label="애니메이션: 1.24 업그레이드와 함께 node-role.kubernetes.io/master 라벨이 사라지고, 셀렉터 매칭이 3에서 0으로, 라우트 리플렉터가 모두 꺼진다">
+  <rect class="box" x="30" y="30" width="470" height="270" rx="12"/>
+  <text x="54" y="64" class="t-sm">$ kubectl get node cp-1 -o yaml</text>
+  <g class="fx-v123"><rect x="420" y="48" width="60" height="24" rx="6" fill="#000" stroke="var(--line-2)"/><text x="450" y="65" text-anchor="middle" class="t-md">1.23</text></g>
+  <g class="fx-v124"><rect x="420" y="48" width="60" height="24" rx="6" fill="#000" stroke="#555"/><text x="450" y="65" text-anchor="middle" style="fill:var(--fg);font-size:11.5px">1.24</text></g>
+  <g style="font-size:13px">
+    <text x="54" y="104" style="fill:var(--fg-2)">metadata:</text>
+    <text x="70" y="132" style="fill:var(--fg-2)">labels:</text>
+    <text x="90" y="162" style="fill:var(--fg-3)">kubernetes.io/hostname: cp-1</text>
+    <g class="fx-master">
+      <rect class="fx-hl" x="80" y="176" width="400" height="30" rx="5"/>
+      <text x="90" y="196" class="fx-mtext">node-role.kubernetes.io/master: ""</text>
+      <line class="fx-strike" x1="88" y1="191" x2="372" y2="191"/>
+    </g>
+    <text x="90" y="236" style="fill:var(--fg-3)">node-role.kubernetes.io/control-plane: ""</text>
+  </g>
+  <text class="fx-gone ko" x="54" y="278" style="fill:var(--err);font-size:12.5px">1.24에서 master 라벨 제거</text>
+
+  <path class="fx-wire" d="M500 165H540"/>
+
+  <rect class="box" x="540" y="30" width="390" height="270" rx="12"/>
+  <text x="564" y="64" class="t-sm">Calico BGPPeer</text>
+  <text x="564" y="96" style="fill:var(--fg-2);font-size:12.5px">peerSelector: has(node-role.../master)</text>
+  <text x="564" y="140" class="t-sm ko" style="font-family:var(--sans)">매칭된 리플렉터</text>
+  <text class="fx-n3" x="564" y="206" style="fill:var(--ok);font:600 64px var(--sans)">3</text>
+  <text class="fx-n0" x="564" y="206" style="fill:var(--err);font:600 64px var(--sans)">0</text>
+  <g>
+    <rect class="fx-rr" x="660" y="160" width="76" height="30" rx="15"/><text x="698" y="180" text-anchor="middle" class="t-md">cp-1</text>
+    <rect class="fx-rr" x="746" y="160" width="76" height="30" rx="15"/><text x="784" y="180" text-anchor="middle" class="t-md">cp-2</text>
+    <rect class="fx-rr" x="832" y="160" width="76" height="30" rx="15"/><text x="870" y="180" text-anchor="middle" class="t-md">cp-3</text>
+  </g>
+  <text class="fx-ok ko" x="564" y="262" style="fill:var(--ok);font-size:13px">파드 라우트 반사 중</text>
+  <text class="fx-bad ko" x="564" y="262" style="fill:var(--err);font-size:13px">피어 0, 파드 라우트 전부 소멸</text>
+</svg></div></figure>
+    <figure class="card"><div class="scroll">
+<svg viewBox="0 0 960 280" role="img" aria-label="컨트롤 플레인 라벨 하나가 사라진 일이 Reddit 전면 중단 314분으로 증폭됐다">
+  <defs><linearGradient id="amp" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#ff6166" stop-opacity=".05"/><stop offset="1" stop-color="#ff6166" stop-opacity=".28"/></linearGradient></defs>
+  <text x="50" y="104" class="ko" style="fill:var(--fg-3);font-size:13px">원인</text>
+  <rect x="40" y="116" width="290" height="48" rx="8" fill="#000" stroke="var(--line-2)"/>
+  <text x="185" y="145" text-anchor="middle" style="fill:var(--err);font-size:12.5px">node-role.kubernetes.io/master</text>
+  <line x1="62" y1="140" x2="308" y2="140" stroke="var(--err)" stroke-width="1.5"/>
+  <text x="185" y="190" text-anchor="middle" class="ko" style="fill:var(--fg-2);font-size:13px">컨트롤 플레인 라벨 1개</text>
+  <polygon points="340,132 620,36 620,244 340,148" fill="url(#amp)"/>
+  <g class="ko" style="font-size:12px;fill:var(--fg-3)">
+    <text x="420" y="122">셀렉터 0대</text><text x="470" y="146">리플렉터 0</text><text x="520" y="170">파드 라우트 0</text>
+  </g>
+  <rect x="630" y="36" width="290" height="208" rx="14" fill="rgba(255,97,102,.06)" stroke="var(--err)"/>
+  <text x="775" y="84" text-anchor="middle" class="ko" style="fill:var(--err);font-size:14px">결과</text>
+  <text x="775" y="150" text-anchor="middle" class="ko" style="fill:var(--fg);font:600 34px var(--sans);letter-spacing:-1px">Reddit 전면 중단</text>
+  <text x="775" y="206" text-anchor="middle" style="fill:var(--err);font:600 40px var(--sans);letter-spacing:-1px">314<tspan class="ko" style="font-size:20px;fill:var(--fg-2)"> 분</tspan></text>
+</svg></div></figure>
+    <div class="prose"><p>코드 버그도, 하드웨어 고장도, 트래픽 폭주도 아니었다. 업스트림이 미리 예고한 <strong>라벨 이름 변경 하나</strong>가 아무도 기억하지 못한 수작업 설정과 만나, 클러스터의 모든 파드 라우트를 지웠다.</p><p>컨트롤 플레인은 끝까지 정상이었고 노드도 모두 Ready였다. 가장 작은 변경이 가장 조용한 곳에서 가장 큰 장애를 만들었다.</p></div>
+  </div>
+</section>
 </main>
 
 <footer>
   <div class="wrap">
     <div>출처</div>
     <div class="src">
-      <a href="https://www.reddit.com/r/RedditEng/comments/11xx5o0/you_broke_reddit_the_piday_outage/">You Broke Reddit: The Pi-Day Outage, r/RedditEng</a>
-      <a href="https://www.youtube.com/watch?v=J3VavGnt5Yg">Kubernetes Crash Course (A True Story), 영상</a>
-      <a href="https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.24.md">Kubernetes 1.24 체인지로그</a>
-      <a href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">Configure BGP peering, Calico 문서</a>
+      <a target="_blank" rel="noopener" href="https://www.reddit.com/r/RedditEng/comments/11xx5o0/you_broke_reddit_the_piday_outage/">You Broke Reddit: The Pi-Day Outage, r/RedditEng</a>
+      <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=J3VavGnt5Yg">Kubernetes Crash Course (A True Story), 영상</a>
+      <a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.24.md">Kubernetes 1.24 체인지로그</a>
+      <a target="_blank" rel="noopener" href="https://docs.tigera.io/calico/latest/networking/configuring/bgp">Configure BGP peering, Calico 문서</a>
     </div>
     <p style="margin-top:24px">토폴로지, 노드 이름, CIDR, BGPPeer 매니페스트는 설명을 위해 단순화했다.</p>
   </div>
