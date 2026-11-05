@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,11 +7,12 @@
 <meta name="description" content="Infrastructure postmortems and deep dives, drawn as diagrams.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
 :root { --bg: #000; --bg-1: transparent; --line: #1f1f1f; --line-2: #333; --fg: #ededed; --fg-2: #a1a1a1; --fg-3: #666; --err: #ff6166; color-scheme: dark; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--fg); font-family: "Geist", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+body { background: var(--bg); color: var(--fg); font-family: "Geist", "Pretendard Variable", Pretendard, ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
 .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
 header { padding: 96px 0 48px; }
@@ -34,7 +35,7 @@ h1 { font-size: clamp(40px, 7vw, 64px); letter-spacing: -.045em; font-weight: 60
   <div class="list">
     <a class="item" href="reddit-pi-day-2023/">
       <span class="date">2023-03-14</span>
-      <span><div class="t">Reddit Pi-Day Outage</div><div class="d">Kubernetes 1.24 removed a label. Calico route reflectors vanished.</div></span>
+      <span><div class="t">Reddit Pi-Day 장애</div><div class="d">Kubernetes 1.24가 라벨 하나를 지우자 Calico 라우트 리플렉터가 사라졌다.</div></span>
     </a>
   </div>
 </div>
